@@ -4,4 +4,14 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="UtilityLibrary">
+      <HintPath>..\..\UtilityLibrary\UtilityLibrary\bin\Debug\netcoreapp2.1\UtilityLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
