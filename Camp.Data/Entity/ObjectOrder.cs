@@ -1,6 +1,7 @@
 ﻿using Camp.Data.Entity.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UtilityLibrary;
 
@@ -21,10 +22,8 @@ namespace Camp.Data.Entity
         public DateTime From { get; set; }
         public DateTime To { get; set; }
 
-        public int PersonsCount { get; set; }
-        public int ChildrensCount { get; set; }
-        public int BabiesCount { get; set; }
         public PaymentType PaymentType { get; set; }
+        public OrderState OrderState { get; set; } = OrderState.Created;
 
         private ICollection<ObjectOrderDiet> objectOrderDiets;
         public virtual ICollection<ObjectOrderDiet> ObjectOrderDiets
@@ -39,5 +38,24 @@ namespace Camp.Data.Entity
             get { return objects ?? (objects = new HashSet<ObjectOrderObject>()); }
             set { objects = value; }
         }
+
+        private ICollection<Payment> payments;
+        public virtual ICollection<Payment> Payments
+        {
+            get { return payments ?? (payments = new HashSet<Payment>()); }
+            set { payments = value; }
+        }
+
+        public int PersonsCount => Objects.Sum(x => x.PersonsCount);
+        public int ChildrensCount => Objects.Sum(x => x.ChildrensCount);
+        public int BabiesCount => Objects.Sum(x => x.BabiesCount);
+
+        public int Nights => (To.Date - From.Date).Days;
+
+        public decimal PriceForObject => Objects.Sum(x => x.TotalPayingPersons * x.Object.ObjectType.ActualPrice(Nights) * Nights);
+
+        public decimal PriceForDiet => ObjectOrderDiets.Sum(x => x.Price);
+
+        public decimal TotalPrice => PriceForObject + PriceForDiet;
     }
 }

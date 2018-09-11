@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UtilityLibrary;
 
@@ -24,6 +25,11 @@ namespace Camp.Data.Entity
         {
             get { return prices ?? (prices = new HashSet<ObjectTypePrice>()); }
             set { prices = value; }
+        }
+
+        public decimal ActualPrice(int Nights)
+        {
+            return Prices.FirstOrDefault(x => x.MinNights <= Nights && x.MaxNights >= Nights).Price;
         }
     }
 }

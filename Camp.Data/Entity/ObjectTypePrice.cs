@@ -11,6 +11,7 @@ namespace Camp.Data.Entity
         public int PersonsCount { get; set; }
         public int MinNights { get; set; }
         public int MaxNights { get; set; }
+        public decimal Price { get; set; }
 
         [ForeignKey("ObjectType")]
         public int ObjectTypeId { get; set; }

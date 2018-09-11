@@ -24,13 +24,13 @@ namespace Camp.Data.Entity
 
         public bool IsAvailable(DateTime From, DateTime To)
         {
-            if (!Orders.Any(x => x.ObjectOrder.From.Date < To.Date && From.Date < x.ObjectOrder.To.Date))
+            if (!Orders.Any(x => x.ObjectOrder.OrderState != Enums.OrderState.Canceled && x.ObjectOrder.From.Date < To.Date && From.Date < x.ObjectOrder.To.Date))
                 return true;
 
             return false;
         }
 
-        public IEnumerable<Term> OccupiedTerms => Orders.Select(x => new Term { From = x.ObjectOrder.From, To = x.ObjectOrder.To });
+        public IEnumerable<Term> OccupiedTerms => Orders.Where(x => x.ObjectOrder.OrderState != Enums.OrderState.Canceled).Select(x => new Term { From = x.ObjectOrder.From, To = x.ObjectOrder.To });
     }
 
     
