@@ -1,6 +1,8 @@
 ﻿using Camp.Data.Entity.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using UtilityLibrary;
@@ -9,20 +11,24 @@ namespace Camp.Data.Entity
 {
     public class ObjectOrder : BaseEntity<int>, ISoftDeletable
     {
+        [Required]
         public string Firstname { get; set; }
+        [Required]
         public string Lastname { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
         public string Zipcode { get; set; }
+        [Required]
         public string Email { get; set; }
+        [Required]
         public string Telephone { get; set; }
         public string BusinessId { get; set; }
         public string TaxId { get; set; }
         public DateTime From { get; set; }
         public DateTime To { get; set; }
 
-        public PaymentType PaymentType { get; set; }
+        public PaymentMethod PaymentMethod { get; set; }
         public OrderState OrderState { get; set; } = OrderState.Created;
 
         private ICollection<ObjectOrderDiet> objectOrderDiets;
@@ -44,6 +50,15 @@ namespace Camp.Data.Entity
         {
             get { return payments ?? (payments = new HashSet<Payment>()); }
             set { payments = value; }
+        }
+
+        [NotMapped]
+        private ICollection<ObjectType> objectTypes;
+        [NotMapped]
+        public virtual ICollection<ObjectType> ObjectTypes
+        {
+            get { return objectTypes ?? (objectTypes = new HashSet<ObjectType>()); }
+            set { objectTypes = value; }
         }
 
         public int PersonsCount => Objects.Sum(x => x.PersonsCount);

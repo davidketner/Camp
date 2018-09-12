@@ -4,11 +4,10 @@ using System.Text;
 
 namespace Camp.Data.Entity.Enums
 {
-    public enum PaymentType
+    public enum PaymentMethod
     {
-        Payment,
-        Deposit,
-        Supplement,
-        Overpayment
+        Transfer,
+        Invoice,
+        Cash
     }
 }

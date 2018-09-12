@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using UtilityLibrary;
 
@@ -8,7 +9,9 @@ namespace Camp.Data.Entity
     public class Instructor : BaseEntity<int>, ISoftDeletable
     {
         public string Title { get; set; }
+        [Required]
         public string Firstname { get; set; }
+        [Required]
         public string Lastname { get; set; }
         public string Facebook { get; set; }
         public string Description { get; set; }

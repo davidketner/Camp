@@ -5,13 +5,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Camp.Web.Models;
+using Camp.Data;
+using Camp.Data.Entity;
 
 namespace Camp.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ICampService Svc;
+        private readonly string userId;
+
+        public HomeController(ICampService svc)
+        {
+            Svc = svc;
+            userId = "ketnda00";
+        }
+
         public IActionResult Index()
         {
+            Svc.CreateDiet(new Diet { Name = "Snídaně", PersonPrice = 250, ChildrenPrice = 200 }, userId);
+            Svc.Commit();
             return View();
         }
 

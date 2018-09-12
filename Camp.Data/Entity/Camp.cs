@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using UtilityLibrary;
@@ -8,7 +9,9 @@ namespace Camp.Data.Entity
 {
     public class Camp : BaseEntity<int>, ISoftDeletable
     {
+        [Required]
         public string Name { get; set; }
+        [Required]
         public int Batch { get; set; }
         public DateTime From { get; set; }
         public DateTime To { get; set; }

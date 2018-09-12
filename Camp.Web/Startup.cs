@@ -39,7 +39,7 @@ namespace Camp.Web
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<CampDbContext>();
-
+            services.AddScoped<ICampService, CampEFCoreService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
