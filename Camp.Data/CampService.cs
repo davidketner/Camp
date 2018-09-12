@@ -54,7 +54,7 @@ namespace Camp.Data
 
         public ResultSvc<Diet> CreateDiet(Diet diet, string userId)
         {
-            var result = new ResultSvc<Diet>(false, null, diet);
+            var result = new ResultSvc<Diet>(null, diet);
             try
             {
                 if (!Diets.Items.Any(x => x.Name == diet.Name.Trim()))
@@ -62,7 +62,6 @@ namespace Camp.Data
                     diet.Name = diet.Name.Trim();
                     diet.UserCreated = userId;
                     Diets.Add(diet);
-                    result.IsOK = true;
                 }
                 else
                 {
@@ -78,7 +77,7 @@ namespace Camp.Data
 
         public ResultSvc<InstructorRole> CreateInstructorRole(InstructorRole role, string userId)
         {
-            var result = new ResultSvc<InstructorRole>(false, null, role);
+            var result = new ResultSvc<InstructorRole>(null, role);
             try
             {
                 if (!InstructorRoles.Items.Any(x => x.Name == role.Name.Trim()))
@@ -86,7 +85,6 @@ namespace Camp.Data
                     role.Name = role.Name.Trim();
                     role.UserCreated = userId;
                     InstructorRoles.Add(role);
-                    result.IsOK = true;
                 }
                 else
                 {
@@ -102,14 +100,13 @@ namespace Camp.Data
 
         public ResultSvc<Photo> CreatePhoto(Photo photo, string userId)
         {
-            var result = new ResultSvc<Photo>(false, null, photo);
+            var result = new ResultSvc<Photo>(null, photo);
             try
             {
                 photo.Name = photo.Name.Trim();
                 photo.Description = photo.Description.Trim();
                 photo.UserCreated = userId;
                 Photos.Add(photo);
-                result.IsOK = true;
             }
             catch (Exception e)
             {
@@ -120,7 +117,7 @@ namespace Camp.Data
 
         public ResultSvc<Instructor> CreateInstructor(Instructor instructor, string userId)
         {
-            var result = new ResultSvc<Instructor>(false, null, instructor);
+            var result = new ResultSvc<Instructor>(null, instructor);
             try
             {
                 if(!Instructors.Items.Any(x => x.Firstname == instructor.Firstname.Trim() && x.Lastname == instructor.Lastname.Trim() && x.Title == instructor.Title.Trim()))
@@ -134,7 +131,6 @@ namespace Camp.Data
                     instructor.Facebook = instructor.Facebook.Trim();
                     instructor.UserCreated = userId;
                     Instructors.Add(instructor);
-                    result.IsOK = true;
                 }
                 else
                 {
@@ -150,14 +146,13 @@ namespace Camp.Data
 
         public ResultSvc<CampCategory> CreateCampCategory(CampCategory campCategory, string userId)
         {
-            var result = new ResultSvc<CampCategory>(false, null, campCategory);
+            var result = new ResultSvc<CampCategory>(null, campCategory);
             try
             {
                 if (!CampCategories.Items.Any(x => x.Name == campCategory.Name.Trim()))
                 {
                     campCategory.Name = campCategory.Name.Trim();
                     CampCategories.Add(campCategory);
-                    result.IsOK = true;
                 }
                 else
                 {
@@ -173,7 +168,7 @@ namespace Camp.Data
 
         public ResultSvc<Entity.Camp> CreateCamp(Entity.Camp camp, string userId)
         {
-            var result = new ResultSvc<Entity.Camp>(false, null, camp);
+            var result = new ResultSvc<Entity.Camp>(null, camp);
             try
             {
                 if(!Camps.Items.Any(x => x.Name == camp.Name.Trim() && x.Batch == camp.Batch && x.From == camp.From && x.To == camp.To && x.CampCategoryId == camp.CampCategoryId))
@@ -184,7 +179,6 @@ namespace Camp.Data
                     camp.Schedule = camp.Schedule.Trim();
                     camp.UserCreated = userId;
                     Camps.Add(camp);
-                    result.IsOK = true;
                 }
                 else
                 {
@@ -200,7 +194,7 @@ namespace Camp.Data
 
         public ResultSvc<InstructorCamp> AddInstructorToCamp(int instructorId, int campId, int instructorRoleId, string userId)
         {
-            var result = new ResultSvc<InstructorCamp>(false, null, new InstructorCamp { CampId = campId, InstructorId = instructorId, InstructorRoleId = instructorRoleId });
+            var result = new ResultSvc<InstructorCamp>(null, new InstructorCamp { CampId = campId, InstructorId = instructorId, InstructorRoleId = instructorRoleId });
             try
             {
                 var camp = Camps.FindById(campId);
@@ -209,7 +203,6 @@ namespace Camp.Data
                     camp.InstructorCamps.Add(new InstructorCamp { InstructorId = instructorId, InstructorRoleId = instructorRoleId });
                     camp.UserUpdated = userId;
                     Camps.Update(camp);
-                    result.IsOK = true;
                 }
                 else
                 {
@@ -225,7 +218,7 @@ namespace Camp.Data
 
         public ResultSvc<ObjectType> CreateObjectType(ObjectType objectType, string userId)
         {
-            var result = new ResultSvc<ObjectType>(false, null, objectType);
+            var result = new ResultSvc<ObjectType>(null, objectType);
             try
             {
                 if(!ObjectTypes.Items.Any(x => x.Name == objectType.Name.Trim() && x.Capacity == objectType.Capacity))
@@ -234,7 +227,6 @@ namespace Camp.Data
                     objectType.ObjectsName = objectType.ObjectsName.Trim();
                     objectType.UserCreated = userId;
                     ObjectTypes.Add(objectType);
-                    result.IsOK = true;
                 }
                 else
                 {
@@ -250,7 +242,7 @@ namespace Camp.Data
 
         public ResultSvc<Entity.Object> CreateObject(Entity.Object _object, string userId)
         {
-            var result = new ResultSvc<Entity.Object>(false, null, _object);
+            var result = new ResultSvc<Entity.Object>(null, _object);
             try
             {
                 if (!Objects.Items.Any(x => x.Mark == _object.Mark.Trim() && x.ObjectTypeId == _object.ObjectTypeId))
@@ -258,7 +250,6 @@ namespace Camp.Data
                     _object.Mark = _object.Mark.Trim();
                     _object.UserCreated = userId;
                     Objects.Add(_object);
-                    result.IsOK = true;
                 }
                 else
                 {
@@ -274,14 +265,13 @@ namespace Camp.Data
 
         public ResultSvc<ObjectTypePrice> CreateObjectTypePrice(ObjectTypePrice objectTypePrice, string userId)
         {
-            var result = new ResultSvc<ObjectTypePrice>(false, null, objectTypePrice);
+            var result = new ResultSvc<ObjectTypePrice>(null, objectTypePrice);
             try
             {
                 if(!ObjectTypePrices.Items.Any(x => x.PersonsCount == objectTypePrice.PersonsCount && x.MinNights == objectTypePrice.MinNights && x.MaxNights == objectTypePrice.MaxNights && x.ObjectTypeId == objectTypePrice.ObjectTypeId))
                 {
                     objectTypePrice.UserCreated = userId;
                     ObjectTypePrices.Add(objectTypePrice);
-                    result.IsOK = true;
                 }
                 else
                 {
@@ -297,14 +287,52 @@ namespace Camp.Data
 
         public ResultSvc<ObjectOrder> CreateObjectOrder(ObjectOrder objectOrder, string userId)
         {
-            var result = new ResultSvc<ObjectOrder>(false, null, objectOrder);
+            var result = new ResultSvc<ObjectOrder>(null, objectOrder);
             try
             {
+                if (!objectOrder.Objects.Any())
+                {
+                    result.Errors.Add("Není vybráno žádné ubytování.");
+                    return result;
+                }
 
+                foreach (var _object in objectOrder.Objects)
+                {
+                    var obj = Objects.FindById(_object.ObjectId);
+                    if (obj.ObjectType.Capacity < _object.TotalPayingPersons)
+                        result.Errors.Add("Zvolené ubytování nemá tak velkou kapacitu.");
+                    if (!obj.IsAvailable(objectOrder.From, objectOrder.To))
+                        result.Errors.Add("Zvolené ubytování je v tomto termínu obsazené.");
+                }
+
+                if(result.Errors.Count == 0)
+                {
+                    objectOrder.Firstname = objectOrder.Firstname.Trim();
+                    objectOrder.Lastname = objectOrder.Lastname.Trim();
+                    objectOrder.Telephone = objectOrder.Telephone.Trim();
+                    objectOrder.Email = objectOrder.Email.Trim();
+                    objectOrder.UserCreated = userId;
+                    ObjectOrders.Add(objectOrder);
+                }
             }
-            catch
+            catch (Exception e)
             {
+                Logger.LogError("Chyba při vytváření entity objektová objednávka - " + e.Message);
+            }
+            return result;
+        }
 
+        public ResultSvc<Payment> CreatePayment(Payment payment, string userId)
+        {
+            var result = new ResultSvc<Payment>(null, payment);
+            try
+            {
+                payment.UserCreated = userId;
+                Payments.Add(payment);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("Chyba při vytváření entity platba - " + e.Message);
             }
             return result;
         }

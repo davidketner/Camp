@@ -34,5 +34,6 @@ namespace Camp.Data
         ResultSvc<ObjectTypePrice> CreateObjectTypePrice(ObjectTypePrice objectTypePrice, string userId);
         ResultSvc<InstructorCamp> AddInstructorToCamp(int instructorId, int campId, int instructorRoleId, string userId);
         ResultSvc<ObjectOrder> CreateObjectOrder(ObjectOrder objectOrder, string userId);
+        ResultSvc<Payment> CreatePayment(Payment payment, string userId);
     }
 }

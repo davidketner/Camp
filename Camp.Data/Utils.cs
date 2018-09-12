@@ -6,7 +6,7 @@ namespace Camp.Data
 {
     public class ResultSvc<T>
     {
-        public bool IsOK { get; set; }
+        public bool IsOK => Errors.Count == 0;
         public T Obj { get; set; }
         private ICollection<string> errors;
         public virtual ICollection<string> Errors
@@ -15,9 +15,8 @@ namespace Camp.Data
             set { errors = value; }
         }
 
-        public ResultSvc(bool IsOK, ICollection<string> Errors, T Obj)
+        public ResultSvc(ICollection<string> Errors, T Obj)
         {
-            this.IsOK = IsOK;
             this.Errors = Errors;
             this.Obj = Obj;
         }

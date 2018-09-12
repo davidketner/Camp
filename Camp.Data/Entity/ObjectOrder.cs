@@ -52,15 +52,6 @@ namespace Camp.Data.Entity
             set { payments = value; }
         }
 
-        [NotMapped]
-        private ICollection<ObjectType> objectTypes;
-        [NotMapped]
-        public virtual ICollection<ObjectType> ObjectTypes
-        {
-            get { return objectTypes ?? (objectTypes = new HashSet<ObjectType>()); }
-            set { objectTypes = value; }
-        }
-
         public int PersonsCount => Objects.Sum(x => x.PersonsCount);
         public int ChildrensCount => Objects.Sum(x => x.ChildrensCount);
         public int BabiesCount => Objects.Sum(x => x.BabiesCount);
