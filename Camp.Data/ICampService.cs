@@ -1,5 +1,6 @@
 ﻿using Camp.Data.Entity;
 using Camp.Data.Repositories;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,7 +20,6 @@ namespace Camp.Data
         IObjectTypeRepository ObjectTypes { get; set; }
         IPaymentRepository Payments { get; set; }
         IPhotoRepository Photos { get; set; }
-
         void Dispose();
         void Commit();
 

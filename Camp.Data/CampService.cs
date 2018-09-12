@@ -5,6 +5,7 @@ using System.Text;
 using Camp.Data.Entity;
 using Camp.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Camp.Data
 {
@@ -21,6 +22,25 @@ namespace Camp.Data
         public IObjectTypeRepository ObjectTypes { get; set; }
         public IPaymentRepository Payments { get; set; }
         public IPhotoRepository Photos { get; set; }
+
+        //Logger
+        private static ILoggerFactory _Factory = null;
+
+        public static ILoggerFactory LoggerFactory
+        {
+            get
+            {
+                if (_Factory == null)
+                {
+                    _Factory = new LoggerFactory();
+                    _Factory.AddFile("Logs/{Date}.txt");
+                }
+                return _Factory;
+            }
+            set { _Factory = value; }
+        }
+        public static ILogger Logger => LoggerFactory.CreateLogger("Log");
+        //
 
         public virtual void Commit()
         {
@@ -51,6 +71,7 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
+                Logger.LogError("Chyba při vytváření entity strava - " + e.Message);
             }
             return result;
         }
@@ -74,6 +95,7 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
+                Logger.LogError("Chyba při vytváření entity instruktor role - " + e.Message);
             }
             return result;
         }
@@ -91,6 +113,7 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
+                Logger.LogError("Chyba při vytváření entity fotografie - " + e.Message);
             }
             return result;
         }
@@ -120,6 +143,7 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
+                Logger.LogError("Chyba při vytváření entity instruktor - " + e.Message);
             }
             return result;
         }
@@ -142,6 +166,7 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
+                Logger.LogError("Chyba při vytváření entity kategorie tábor - " + e.Message);
             }
             return result;
         }
@@ -168,7 +193,7 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-
+                Logger.LogError("Chyba při vytváření entity tábor - " + e.Message);
             }
             return result;
         }
@@ -193,7 +218,7 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-
+                Logger.LogError("Chyba při vytváření entity instruktor tábor - " + e.Message);
             }
             return result;
         }
@@ -218,7 +243,7 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-
+                Logger.LogError("Chyba při vytváření entity objekt - " + e.Message);
             }
             return result;
         }
@@ -242,7 +267,7 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-
+                Logger.LogError("Chyba při vytváření entity objektový typ - " + e.Message);
             }
             return result;
         }
@@ -265,7 +290,7 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-
+                Logger.LogError("Chyba při vytváření entity objektový typ cena - " + e.Message);
             }
             return result;
         }
