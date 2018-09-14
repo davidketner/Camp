@@ -10,20 +10,17 @@ using Camp.Data.Entity;
 
 namespace Camp.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly ICampService Svc;
-        private readonly string userId;
 
-        public HomeController(ICampService svc)
+        public HomeController(ICampService svc) : base(svc)
         {
-            Svc = svc;
-            userId = "ketnda00";
+
         }
 
         public IActionResult Index()
         {
-            Svc.CreateDiet(new Diet { Name = "Snídaně", PersonPrice = 250, ChildrenPrice = 200 }, userId);
+            Svc.CreateDiet(new Diet { Name = "Oběd", PersonPrice = 250, ChildrenPrice = 200 });
             Svc.Commit();
             return View();
         }

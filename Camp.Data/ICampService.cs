@@ -20,10 +20,12 @@ namespace Camp.Data
         IObjectTypeRepository ObjectTypes { get; set; }
         IPaymentRepository Payments { get; set; }
         IPhotoRepository Photos { get; set; }
+        string UserId { get; set; }
+        bool IsAuthenticated { get; }
         void Dispose();
         void Commit();
 
-        ResultSvc<Diet> CreateDiet(Diet diet, string userId);
+        ResultSvc<Diet> CreateDiet(Diet diet);
         ResultSvc<InstructorRole> CreateInstructorRole(InstructorRole role, string userId);
         ResultSvc<Photo> CreatePhoto(Photo photo, string userId);
         ResultSvc<Instructor> CreateInstructor(Instructor instructor, string userId);

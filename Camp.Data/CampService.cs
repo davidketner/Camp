@@ -22,6 +22,8 @@ namespace Camp.Data
         public IObjectTypeRepository ObjectTypes { get; set; }
         public IPaymentRepository Payments { get; set; }
         public IPhotoRepository Photos { get; set; }
+        public string UserId { get; set; }
+        public bool IsAuthenticated => !string.IsNullOrEmpty(UserId) && UserId != Constants.Customer;
 
         //Logger
         private static ILoggerFactory _Factory = null;
@@ -52,7 +54,7 @@ namespace Camp.Data
             throw new NotImplementedException();
         }
 
-        public ResultSvc<Diet> CreateDiet(Diet diet, string userId)
+        public ResultSvc<Diet> CreateDiet(Diet diet)
         {
             var result = new ResultSvc<Diet>(null, diet);
             try
@@ -60,7 +62,7 @@ namespace Camp.Data
                 if (!Diets.Items.Any(x => x.Name == diet.Name.Trim()))
                 {
                     diet.Name = diet.Name.Trim();
-                    diet.UserCreated = userId;
+                    diet.UserCreated = UserId;
                     Diets.Add(diet);
                 }
                 else
