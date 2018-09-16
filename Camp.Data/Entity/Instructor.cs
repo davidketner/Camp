@@ -19,6 +19,9 @@ namespace Camp.Data.Entity
         public string Phone { get; set; }
         public DateTime? DateOfBirth { get; set; }
 
+        public virtual User UserCreated { get; set; }
+        public virtual User UserUpdated { get; set; }
+
         private ICollection<InstructorCamp> instructorCamps;
         public virtual ICollection<InstructorCamp> InstructorCamps
         {

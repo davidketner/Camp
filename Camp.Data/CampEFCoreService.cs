@@ -14,6 +14,7 @@ namespace Camp.Data
         {
             DbContext = db;
             CampCategories = new CampCategoryRepository(db);
+            CampBatches = new CampBatchRepository(db);
             Camps = new CampRepository(db);
             Diets = new DietRepository(db);
             Instructors = new InstructorRepository(db);

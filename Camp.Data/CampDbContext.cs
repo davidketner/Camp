@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Camp.Data
 {
-    public class CampDbContext : IdentityDbContext
+    public class CampDbContext : IdentityDbContext<User>
     {
         public CampDbContext(DbContextOptions<CampDbContext> options)
             : base(options)
@@ -21,6 +21,7 @@ namespace Camp.Data
         }
 
         public DbSet<Entity.Camp> Camps { get; set; }
+        public DbSet<CampBatch> CampBatches { get; set; }
         public DbSet<CampCategory> CampCategories { get; set; }
         public DbSet<Diet> Diets { get; set; }
         public DbSet<Instructor> Instructors { get; set; }
@@ -59,7 +60,7 @@ namespace Camp.Data
             }
 
             builder.Entity<InstructorCamp>()
-                   .HasKey(ic => new { ic.InstructorId, ic.CampId, ic.InstructorRoleId });
+                   .HasKey(ic => new { ic.InstructorId, ic.CampBatchId, ic.InstructorRoleId });
 
             builder.Entity<InstructorCamp>()
                    .HasOne(ic => ic.Instructor)
@@ -67,9 +68,9 @@ namespace Camp.Data
                    .HasForeignKey(ic => ic.InstructorId);
 
             builder.Entity<InstructorCamp>()
-                   .HasOne(ic => ic.Camp)
+                   .HasOne(ic => ic.CampBatch)
                    .WithMany(c => c.InstructorCamps)
-                   .HasForeignKey(ic => ic.CampId);
+                   .HasForeignKey(ic => ic.CampBatchId);
 
             builder.Entity<InstructorCamp>()
                    .HasOne(ic => ic.InstructorRole)
@@ -101,7 +102,6 @@ namespace Camp.Data
                    .HasOne(o => o.Object)
                    .WithMany(o => o.Orders)
                    .HasForeignKey(o => o.ObjectId);
-
 
         }
 

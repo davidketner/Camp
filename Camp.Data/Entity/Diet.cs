@@ -13,6 +13,9 @@ namespace Camp.Data.Entity
         public decimal PersonPrice { get; set; }
         public decimal ChildrenPrice { get; set; }
 
+        public virtual User UserCreated { get; set; }
+        public virtual User UserUpdated { get; set; }
+
         private ICollection<ObjectOrderDiet> objectOrderDiets;
         public virtual ICollection<ObjectOrderDiet> ObjectOrderDiets
         {

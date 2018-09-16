@@ -17,6 +17,9 @@ namespace Camp.Data.Entity
         public int ObjectTypeId { get; set; }
         public virtual ObjectType ObjectType { get; set; }
 
+        public virtual User UserCreated { get; set; }
+        public virtual User UserUpdated { get; set; }
+
         private ICollection<ObjectOrderObject> orders;
         public virtual ICollection<ObjectOrderObject> Orders
         {

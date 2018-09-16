@@ -1,0 +1,29 @@
+﻿@model Camp.Data.Entity.InstructorRole
+@{
+    ViewData["Title"] = "Upravit roli instruktorů";
+    ViewData["Icon"] = "mdi-lead-pencil";
+}
+<div class="row">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <form class="forms-sample" asp-controller="InstructorRole" asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Created" />
+                    <input type="hidden" asp-for="UserCreatedId" />
+                    <div class="form-group">
+                        <label for="Name">Název role</label>
+                        <input type="text" asp-for="Name" class="form-control" placeholder="Název role">
+                        <span asp-validation-for="Name" class="invalid-field"></span>
+                    </div>
+                    <button type="submit" class="btn btn-gradient-primary mr-2">Upravit</button>
+                    <a asp-area="Administration" asp-controller="InstructorRole" asp-action="Index" class="btn btn-light">Zpět</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

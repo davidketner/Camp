@@ -25,19 +25,15 @@ namespace Camp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Batch");
+                    b.Property<bool>("Active");
 
                     b.Property<int>("CampCategoryId");
-
-                    b.Property<int>("Capacity");
 
                     b.Property<DateTime>("Created");
 
                     b.Property<DateTime?>("Deleted");
 
                     b.Property<string>("Description");
-
-                    b.Property<DateTime>("From");
 
                     b.Property<bool>("IsDeleted");
 
@@ -46,25 +42,68 @@ namespace Camp.Data.Migrations
 
                     b.Property<string>("OrganizationalInformation");
 
-                    b.Property<decimal>("Price");
-
                     b.Property<string>("Schedule");
-
-                    b.Property<DateTime>("To");
 
                     b.Property<DateTime?>("Updated");
 
-                    b.Property<string>("UserCreated");
+                    b.Property<string>("UserCreatedId");
 
-                    b.Property<string>("UserDeleted");
+                    b.Property<string>("UserDeletedId");
 
-                    b.Property<string>("UserUpdated");
+                    b.Property<string>("UserUpdatedId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CampCategoryId");
 
+                    b.HasIndex("UserCreatedId");
+
+                    b.HasIndex("UserUpdatedId");
+
                     b.ToTable("Camps");
+                });
+
+            modelBuilder.Entity("Camp.Data.Entity.CampBatch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Batch");
+
+                    b.Property<int>("CampId");
+
+                    b.Property<int>("Capacity");
+
+                    b.Property<DateTime>("Created");
+
+                    b.Property<DateTime?>("Deleted");
+
+                    b.Property<DateTime>("From");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<decimal>("Price");
+
+                    b.Property<DateTime>("To");
+
+                    b.Property<DateTime?>("Updated");
+
+                    b.Property<string>("UserCreatedId");
+
+                    b.Property<string>("UserDeletedId");
+
+                    b.Property<string>("UserUpdatedId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CampId");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.HasIndex("UserUpdatedId");
+
+                    b.ToTable("CampBatches");
                 });
 
             modelBuilder.Entity("Camp.Data.Entity.CampCategory", b =>
@@ -72,6 +111,8 @@ namespace Camp.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
 
                     b.Property<DateTime>("Created");
 
@@ -84,13 +125,17 @@ namespace Camp.Data.Migrations
 
                     b.Property<DateTime?>("Updated");
 
-                    b.Property<string>("UserCreated");
+                    b.Property<string>("UserCreatedId");
 
-                    b.Property<string>("UserDeleted");
+                    b.Property<string>("UserDeletedId");
 
-                    b.Property<string>("UserUpdated");
+                    b.Property<string>("UserUpdatedId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.HasIndex("UserUpdatedId");
 
                     b.ToTable("CampCategories");
                 });
@@ -116,13 +161,17 @@ namespace Camp.Data.Migrations
 
                     b.Property<DateTime?>("Updated");
 
-                    b.Property<string>("UserCreated");
+                    b.Property<string>("UserCreatedId");
 
-                    b.Property<string>("UserDeleted");
+                    b.Property<string>("UserDeletedId");
 
-                    b.Property<string>("UserUpdated");
+                    b.Property<string>("UserUpdatedId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.HasIndex("UserUpdatedId");
 
                     b.ToTable("Diets");
                 });
@@ -159,13 +208,17 @@ namespace Camp.Data.Migrations
 
                     b.Property<DateTime?>("Updated");
 
-                    b.Property<string>("UserCreated");
+                    b.Property<string>("UserCreatedId");
 
-                    b.Property<string>("UserDeleted");
+                    b.Property<string>("UserDeletedId");
 
-                    b.Property<string>("UserUpdated");
+                    b.Property<string>("UserUpdatedId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.HasIndex("UserUpdatedId");
 
                     b.ToTable("Instructors");
                 });
@@ -174,13 +227,13 @@ namespace Camp.Data.Migrations
                 {
                     b.Property<int>("InstructorId");
 
-                    b.Property<int>("CampId");
+                    b.Property<int>("CampBatchId");
 
                     b.Property<int>("InstructorRoleId");
 
-                    b.HasKey("InstructorId", "CampId", "InstructorRoleId");
+                    b.HasKey("InstructorId", "CampBatchId", "InstructorRoleId");
 
-                    b.HasIndex("CampId");
+                    b.HasIndex("CampBatchId");
 
                     b.HasIndex("InstructorRoleId");
 
@@ -202,15 +255,21 @@ namespace Camp.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<int>("Order");
+
                     b.Property<DateTime?>("Updated");
 
-                    b.Property<string>("UserCreated");
+                    b.Property<string>("UserCreatedId");
 
-                    b.Property<string>("UserDeleted");
+                    b.Property<string>("UserDeletedId");
 
-                    b.Property<string>("UserUpdated");
+                    b.Property<string>("UserUpdatedId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.HasIndex("UserUpdatedId");
 
                     b.ToTable("InstructorRoles");
                 });
@@ -234,15 +293,19 @@ namespace Camp.Data.Migrations
 
                     b.Property<DateTime?>("Updated");
 
-                    b.Property<string>("UserCreated");
+                    b.Property<string>("UserCreatedId");
 
-                    b.Property<string>("UserDeleted");
+                    b.Property<string>("UserDeletedId");
 
-                    b.Property<string>("UserUpdated");
+                    b.Property<string>("UserUpdatedId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ObjectTypeId");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.HasIndex("UserUpdatedId");
 
                     b.ToTable("Objects");
                 });
@@ -291,11 +354,11 @@ namespace Camp.Data.Migrations
 
                     b.Property<DateTime?>("Updated");
 
-                    b.Property<string>("UserCreated");
+                    b.Property<string>("UserCreatedId");
 
-                    b.Property<string>("UserDeleted");
+                    b.Property<string>("UserDeletedId");
 
-                    b.Property<string>("UserUpdated");
+                    b.Property<string>("UserUpdatedId");
 
                     b.Property<string>("Zipcode");
 
@@ -362,13 +425,17 @@ namespace Camp.Data.Migrations
 
                     b.Property<DateTime?>("Updated");
 
-                    b.Property<string>("UserCreated");
+                    b.Property<string>("UserCreatedId");
 
-                    b.Property<string>("UserDeleted");
+                    b.Property<string>("UserDeletedId");
 
-                    b.Property<string>("UserUpdated");
+                    b.Property<string>("UserUpdatedId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.HasIndex("UserUpdatedId");
 
                     b.ToTable("ObjectTypes");
                 });
@@ -397,15 +464,19 @@ namespace Camp.Data.Migrations
 
                     b.Property<DateTime?>("Updated");
 
-                    b.Property<string>("UserCreated");
+                    b.Property<string>("UserCreatedId");
 
-                    b.Property<string>("UserDeleted");
+                    b.Property<string>("UserDeletedId");
 
-                    b.Property<string>("UserUpdated");
+                    b.Property<string>("UserUpdatedId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ObjectTypeId");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.HasIndex("UserUpdatedId");
 
                     b.ToTable("ObjectTypePrices");
                 });
@@ -430,11 +501,11 @@ namespace Camp.Data.Migrations
 
                     b.Property<DateTime?>("Updated");
 
-                    b.Property<string>("UserCreated");
+                    b.Property<string>("UserCreatedId");
 
-                    b.Property<string>("UserDeleted");
+                    b.Property<string>("UserDeletedId");
 
-                    b.Property<string>("UserUpdated");
+                    b.Property<string>("UserUpdatedId");
 
                     b.HasKey("Id");
 
@@ -474,11 +545,11 @@ namespace Camp.Data.Migrations
 
                     b.Property<DateTime?>("Updated");
 
-                    b.Property<string>("UserCreated");
+                    b.Property<string>("UserCreatedId");
 
-                    b.Property<string>("UserDeleted");
+                    b.Property<string>("UserDeletedId");
 
-                    b.Property<string>("UserUpdated");
+                    b.Property<string>("UserUpdatedId");
 
                     b.HasKey("Id");
 
@@ -488,7 +559,68 @@ namespace Camp.Data.Migrations
 
                     b.HasIndex("InstructorId");
 
+                    b.HasIndex("UserCreatedId");
+
+                    b.HasIndex("UserUpdatedId");
+
                     b.ToTable("Photos");
+                });
+
+            modelBuilder.Entity("Camp.Data.Entity.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("Firstname");
+
+                    b.Property<string>("ImgPath");
+
+                    b.Property<string>("Lastname");
+
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -533,57 +665,6 @@ namespace Camp.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("AccessFailedCount");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256);
-
-                    b.Property<bool>("EmailConfirmed");
-
-                    b.Property<bool>("LockoutEnabled");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("PasswordHash");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("SecurityStamp");
-
-                    b.Property<bool>("TwoFactorEnabled");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -662,13 +743,70 @@ namespace Camp.Data.Migrations
                         .WithMany("Camps")
                         .HasForeignKey("CampCategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Camp.Data.Entity.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId");
+
+                    b.HasOne("Camp.Data.Entity.User", "UserUpdated")
+                        .WithMany()
+                        .HasForeignKey("UserUpdatedId");
+                });
+
+            modelBuilder.Entity("Camp.Data.Entity.CampBatch", b =>
+                {
+                    b.HasOne("Camp.Data.Entity.Camp", "Camp")
+                        .WithMany("Batches")
+                        .HasForeignKey("CampId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Camp.Data.Entity.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId");
+
+                    b.HasOne("Camp.Data.Entity.User", "UserUpdated")
+                        .WithMany()
+                        .HasForeignKey("UserUpdatedId");
+                });
+
+            modelBuilder.Entity("Camp.Data.Entity.CampCategory", b =>
+                {
+                    b.HasOne("Camp.Data.Entity.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId");
+
+                    b.HasOne("Camp.Data.Entity.User", "UserUpdated")
+                        .WithMany()
+                        .HasForeignKey("UserUpdatedId");
+                });
+
+            modelBuilder.Entity("Camp.Data.Entity.Diet", b =>
+                {
+                    b.HasOne("Camp.Data.Entity.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId");
+
+                    b.HasOne("Camp.Data.Entity.User", "UserUpdated")
+                        .WithMany()
+                        .HasForeignKey("UserUpdatedId");
+                });
+
+            modelBuilder.Entity("Camp.Data.Entity.Instructor", b =>
+                {
+                    b.HasOne("Camp.Data.Entity.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId");
+
+                    b.HasOne("Camp.Data.Entity.User", "UserUpdated")
+                        .WithMany()
+                        .HasForeignKey("UserUpdatedId");
                 });
 
             modelBuilder.Entity("Camp.Data.Entity.InstructorCamp", b =>
                 {
-                    b.HasOne("Camp.Data.Entity.Camp", "Camp")
+                    b.HasOne("Camp.Data.Entity.CampBatch", "CampBatch")
                         .WithMany("InstructorCamps")
-                        .HasForeignKey("CampId")
+                        .HasForeignKey("CampBatchId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Camp.Data.Entity.Instructor", "Instructor")
@@ -682,12 +820,31 @@ namespace Camp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Camp.Data.Entity.InstructorRole", b =>
+                {
+                    b.HasOne("Camp.Data.Entity.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId");
+
+                    b.HasOne("Camp.Data.Entity.User", "UserUpdated")
+                        .WithMany()
+                        .HasForeignKey("UserUpdatedId");
+                });
+
             modelBuilder.Entity("Camp.Data.Entity.Object", b =>
                 {
                     b.HasOne("Camp.Data.Entity.ObjectType", "ObjectType")
                         .WithMany("Objects")
                         .HasForeignKey("ObjectTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Camp.Data.Entity.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId");
+
+                    b.HasOne("Camp.Data.Entity.User", "UserUpdated")
+                        .WithMany()
+                        .HasForeignKey("UserUpdatedId");
                 });
 
             modelBuilder.Entity("Camp.Data.Entity.ObjectOrderDiet", b =>
@@ -716,12 +873,31 @@ namespace Camp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Camp.Data.Entity.ObjectType", b =>
+                {
+                    b.HasOne("Camp.Data.Entity.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId");
+
+                    b.HasOne("Camp.Data.Entity.User", "UserUpdated")
+                        .WithMany()
+                        .HasForeignKey("UserUpdatedId");
+                });
+
             modelBuilder.Entity("Camp.Data.Entity.ObjectTypePrice", b =>
                 {
                     b.HasOne("Camp.Data.Entity.ObjectType", "ObjectType")
                         .WithMany("Prices")
                         .HasForeignKey("ObjectTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Camp.Data.Entity.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId");
+
+                    b.HasOne("Camp.Data.Entity.User", "UserUpdated")
+                        .WithMany()
+                        .HasForeignKey("UserUpdatedId");
                 });
 
             modelBuilder.Entity("Camp.Data.Entity.Payment", b =>
@@ -744,6 +920,14 @@ namespace Camp.Data.Migrations
                     b.HasOne("Camp.Data.Entity.Instructor", "Instructor")
                         .WithMany("Photos")
                         .HasForeignKey("InstructorId");
+
+                    b.HasOne("Camp.Data.Entity.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId");
+
+                    b.HasOne("Camp.Data.Entity.User", "UserUpdated")
+                        .WithMany()
+                        .HasForeignKey("UserUpdatedId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -756,7 +940,7 @@ namespace Camp.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("Camp.Data.Entity.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -764,7 +948,7 @@ namespace Camp.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("Camp.Data.Entity.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -777,7 +961,7 @@ namespace Camp.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("Camp.Data.Entity.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -785,7 +969,7 @@ namespace Camp.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
+                    b.HasOne("Camp.Data.Entity.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

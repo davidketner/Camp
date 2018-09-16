@@ -1,0 +1,46 @@
+﻿@model Camp.Data.Entity.Camp
+@{
+    ViewData["Title"] = "Upravit tábor";
+    ViewData["Icon"] = "mdi-lead-pencil";
+}
+
+<div class="row">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <form class="forms-sample" asp-controller="Camp" asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Created" />
+                    <input type="hidden" asp-for="UserCreatedId" />
+                    <div class="form-group">
+                        <label for="Name">Název táboru</label>
+                        <input type="text" asp-for="Name" class="form-control" placeholder="Název táboru">
+                        <span asp-validation-for="Name" class="invalid-field"></span>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            <label for="CampCategoryId">Kategorie</label>
+                            <select class="form-control" asp-for="CampCategoryId"
+                                    asp-items="@ViewBag.Categories"></select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <div class="form-check">
+                                <label for="Active" class="form-check-label">
+                                    <input asp-for="Active" type="checkbox" class="form-check-input">
+                                    Aktivní
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-gradient-primary mr-2">Upravit</button>
+                    <a asp-area="Administration" asp-controller="Camp" asp-action="Index" class="btn btn-light">Zpět</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+

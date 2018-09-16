@@ -8,8 +8,12 @@ namespace Camp.Data.Entity
 {
     public class CampCategory : BaseEntity<int>, ISoftDeletable
     {
-        [Required]
+        [Required(ErrorMessage = "Pole název je povinné!")]
         public string Name { get; set; }
+        public bool Active { get; set; } = true;
+
+        public virtual User UserCreated { get; set; }
+        public virtual User UserUpdated { get; set; }
 
         private ICollection<Camp> camps;
         public virtual ICollection<Camp> Camps

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Camp.Data.Entity;
 using Camp.Data.Repositories;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace Camp.Data
@@ -12,6 +11,7 @@ namespace Camp.Data
     public class CampService : ICampService
     {
         public ICampCategoryRepository CampCategories { get; set; }
+        public ICampBatchRepository CampBatches { get; set; }
         public ICampRepository Camps { get; set; }
         public IDietRepository Diets { get; set; }
         public IInstructorRepository Instructors { get; set; }
@@ -22,8 +22,7 @@ namespace Camp.Data
         public IObjectTypeRepository ObjectTypes { get; set; }
         public IPaymentRepository Payments { get; set; }
         public IPhotoRepository Photos { get; set; }
-        public string UserId { get; set; }
-        public bool IsAuthenticated => !string.IsNullOrEmpty(UserId) && UserId != Constants.Customer;
+        public UserManager<User> UserManager { get; set; }
 
         //Logger
         private static ILoggerFactory _Factory = null;
@@ -54,15 +53,15 @@ namespace Camp.Data
             throw new NotImplementedException();
         }
 
-        public ResultSvc<Diet> CreateDiet(Diet diet)
+        public ResultSvc<Diet> CreateDiet(Diet diet, string userId)
         {
             var result = new ResultSvc<Diet>(null, diet);
             try
             {
                 if (!Diets.Items.Any(x => x.Name == diet.Name.Trim()))
                 {
-                    diet.Name = diet.Name.Trim();
-                    diet.UserCreated = UserId;
+                    diet.Name = diet.Name?.Trim();
+                    diet.UserCreatedId = userId;
                     Diets.Add(diet);
                 }
                 else
@@ -84,8 +83,9 @@ namespace Camp.Data
             {
                 if (!InstructorRoles.Items.Any(x => x.Name == role.Name.Trim()))
                 {
-                    role.Name = role.Name.Trim();
-                    role.UserCreated = userId;
+                    role.Name = role.Name?.Trim();
+                    role.Order = InstructorRoles.Items.Select(x => x.Order).DefaultIfEmpty(1).Max() + 1;
+                    role.UserCreatedId = userId;
                     InstructorRoles.Add(role);
                 }
                 else
@@ -105,9 +105,9 @@ namespace Camp.Data
             var result = new ResultSvc<Photo>(null, photo);
             try
             {
-                photo.Name = photo.Name.Trim();
-                photo.Description = photo.Description.Trim();
-                photo.UserCreated = userId;
+                photo.Name = photo.Name?.Trim();
+                photo.Description = photo.Description?.Trim();
+                photo.UserCreatedId = userId;
                 Photos.Add(photo);
             }
             catch (Exception e)
@@ -124,14 +124,14 @@ namespace Camp.Data
             {
                 if(!Instructors.Items.Any(x => x.Firstname == instructor.Firstname.Trim() && x.Lastname == instructor.Lastname.Trim() && x.Title == instructor.Title.Trim()))
                 {
-                    instructor.Firstname = instructor.Firstname.Trim();
-                    instructor.Lastname = instructor.Lastname.Trim();
-                    instructor.Title = instructor.Title.Trim();
-                    instructor.Description = instructor.Description.Trim();
-                    instructor.Email = instructor.Email.Trim();
-                    instructor.Phone = instructor.Phone.Trim();
-                    instructor.Facebook = instructor.Facebook.Trim();
-                    instructor.UserCreated = userId;
+                    instructor.Firstname = instructor.Firstname?.Trim();
+                    instructor.Lastname = instructor.Lastname?.Trim();
+                    instructor.Title = instructor.Title?.Trim();
+                    instructor.Description = instructor.Description?.Trim();
+                    instructor.Email = instructor.Email?.Trim();
+                    instructor.Phone = instructor.Phone?.Trim();
+                    instructor.Facebook = instructor.Facebook?.Trim();
+                    instructor.UserCreatedId = userId;
                     Instructors.Add(instructor);
                 }
                 else
@@ -153,7 +153,8 @@ namespace Camp.Data
             {
                 if (!CampCategories.Items.Any(x => x.Name == campCategory.Name.Trim()))
                 {
-                    campCategory.Name = campCategory.Name.Trim();
+                    campCategory.Name = campCategory.Name?.Trim();
+                    campCategory.UserCreatedId = userId;
                     CampCategories.Add(campCategory);
                 }
                 else
@@ -173,13 +174,13 @@ namespace Camp.Data
             var result = new ResultSvc<Entity.Camp>(null, camp);
             try
             {
-                if(!Camps.Items.Any(x => x.Name == camp.Name.Trim() && x.Batch == camp.Batch && x.From == camp.From && x.To == camp.To && x.CampCategoryId == camp.CampCategoryId))
+                if(!Camps.Items.Any(x => x.Name == camp.Name.Trim() && x.CampCategoryId == camp.CampCategoryId))
                 {
-                    camp.Name = camp.Name.Trim();
-                    camp.Description = camp.Description.Trim();
-                    camp.OrganizationalInformation = camp.OrganizationalInformation.Trim();
-                    camp.Schedule = camp.Schedule.Trim();
-                    camp.UserCreated = userId;
+                    camp.Name = camp.Name?.Trim();
+                    camp.Description = camp.Description?.Trim();
+                    camp.OrganizationalInformation = camp.OrganizationalInformation?.Trim();
+                    camp.Schedule = camp.Schedule?.Trim();
+                    camp.UserCreatedId = userId;
                     Camps.Add(camp);
                 }
                 else
@@ -194,17 +195,17 @@ namespace Camp.Data
             return result;
         }
 
-        public ResultSvc<InstructorCamp> AddInstructorToCamp(int instructorId, int campId, int instructorRoleId, string userId)
+        public ResultSvc<InstructorCamp> AddInstructorToCamp(int instructorId, int campBatchId, int instructorRoleId, string userId)
         {
-            var result = new ResultSvc<InstructorCamp>(null, new InstructorCamp { CampId = campId, InstructorId = instructorId, InstructorRoleId = instructorRoleId });
+            var result = new ResultSvc<InstructorCamp>(null, new InstructorCamp { CampBatchId = campBatchId, InstructorId = instructorId, InstructorRoleId = instructorRoleId });
             try
             {
-                var camp = Camps.FindById(campId);
-                if(!camp.InstructorCamps.Any(x => x.InstructorId == instructorId && x.InstructorRoleId == instructorRoleId))
+                var campBatch = CampBatches.FindById(campBatchId);
+                if(!campBatch.InstructorCamps.Any(x => x.InstructorId == instructorId && x.InstructorRoleId == instructorRoleId))
                 {
-                    camp.InstructorCamps.Add(new InstructorCamp { InstructorId = instructorId, InstructorRoleId = instructorRoleId });
-                    camp.UserUpdated = userId;
-                    Camps.Update(camp);
+                    campBatch.InstructorCamps.Add(new InstructorCamp { InstructorId = instructorId, InstructorRoleId = instructorRoleId });
+                    campBatch.UserUpdatedId = userId;
+                    CampBatches.Update(campBatch);
                 }
                 else
                 {
@@ -225,9 +226,9 @@ namespace Camp.Data
             {
                 if(!ObjectTypes.Items.Any(x => x.Name == objectType.Name.Trim() && x.Capacity == objectType.Capacity))
                 {
-                    objectType.Name = objectType.Name.Trim();
-                    objectType.ObjectsName = objectType.ObjectsName.Trim();
-                    objectType.UserCreated = userId;
+                    objectType.Name = objectType.Name?.Trim();
+                    objectType.ObjectsName = objectType.ObjectsName?.Trim();
+                    objectType.UserCreatedId = userId;
                     ObjectTypes.Add(objectType);
                 }
                 else
@@ -249,8 +250,8 @@ namespace Camp.Data
             {
                 if (!Objects.Items.Any(x => x.Mark == _object.Mark.Trim() && x.ObjectTypeId == _object.ObjectTypeId))
                 {
-                    _object.Mark = _object.Mark.Trim();
-                    _object.UserCreated = userId;
+                    _object.Mark = _object.Mark?.Trim();
+                    _object.UserCreatedId = userId;
                     Objects.Add(_object);
                 }
                 else
@@ -272,7 +273,7 @@ namespace Camp.Data
             {
                 if(!ObjectTypePrices.Items.Any(x => x.PersonsCount == objectTypePrice.PersonsCount && x.MinNights == objectTypePrice.MinNights && x.MaxNights == objectTypePrice.MaxNights && x.ObjectTypeId == objectTypePrice.ObjectTypeId))
                 {
-                    objectTypePrice.UserCreated = userId;
+                    objectTypePrice.UserCreatedId = userId;
                     ObjectTypePrices.Add(objectTypePrice);
                 }
                 else
@@ -309,11 +310,11 @@ namespace Camp.Data
 
                 if(result.Errors.Count == 0)
                 {
-                    objectOrder.Firstname = objectOrder.Firstname.Trim();
-                    objectOrder.Lastname = objectOrder.Lastname.Trim();
-                    objectOrder.Telephone = objectOrder.Telephone.Trim();
-                    objectOrder.Email = objectOrder.Email.Trim();
-                    objectOrder.UserCreated = userId;
+                    objectOrder.Firstname = objectOrder.Firstname?.Trim();
+                    objectOrder.Lastname = objectOrder.Lastname?.Trim();
+                    objectOrder.Telephone = objectOrder.Telephone?.Trim();
+                    objectOrder.Email = objectOrder.Email?.Trim();
+                    objectOrder.UserCreatedId = userId;
                     ObjectOrders.Add(objectOrder);
                 }
             }
@@ -329,7 +330,7 @@ namespace Camp.Data
             var result = new ResultSvc<Payment>(null, payment);
             try
             {
-                payment.UserCreated = userId;
+                payment.UserCreatedId = userId;
                 Payments.Add(payment);
             }
             catch (Exception e)

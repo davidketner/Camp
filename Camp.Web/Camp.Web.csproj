@@ -14,4 +14,14 @@
     <ProjectReference Include="..\Camp.Data\Camp.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="UtilityLibrary">
+      <HintPath>..\..\UtilityLibrary\UtilityLibrary\bin\Debug\netcoreapp2.1\UtilityLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Services\" />
+  </ItemGroup>
+
 </Project>

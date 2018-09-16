@@ -20,8 +20,6 @@ namespace Camp.Web.Controllers
 
         public IActionResult Index()
         {
-            Svc.CreateDiet(new Diet { Name = "Oběd", PersonPrice = 250, ChildrenPrice = 200 });
-            Svc.Commit();
             return View();
         }
 

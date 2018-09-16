@@ -13,7 +13,6 @@ namespace Camp.Web.Controllers
         public BaseController(ICampService svc)
         {
             Svc = svc;
-            Svc.UserId = User?.Identity?.Name ?? Constants.Customer;
         }
     }
 }

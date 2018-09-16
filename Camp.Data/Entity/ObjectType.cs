@@ -15,6 +15,8 @@ namespace Camp.Data.Entity
         public string ObjectsName { get; set; }
         public int Capacity { get; set; }
 
+        public virtual User UserCreated { get; set; }
+        public virtual User UserUpdated { get; set; }
 
         private ICollection<Object> objects;
         public virtual ICollection<Object> Objects

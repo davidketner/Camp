@@ -11,32 +11,29 @@ namespace Camp.Data.Entity
     {
         [Required]
         public string Name { get; set; }
-        [Required]
-        public int Batch { get; set; }
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
-        public int Capacity { get; set; }
-        public decimal Price { get; set; }
         public string Description { get; set; }
         public string OrganizationalInformation { get; set; }
         public string Schedule { get; set; }
-
+        public bool Active { get; set; } = true;
         [ForeignKey("CampCategory")]
         public int CampCategoryId { get; set; }
         public virtual CampCategory CampCategory { get; set; }
 
-        private ICollection<InstructorCamp> instructorCamps;
-        public virtual ICollection<InstructorCamp> InstructorCamps
-        {
-            get { return instructorCamps ?? (instructorCamps = new HashSet<InstructorCamp>()); }
-            set { instructorCamps = value; }
-        }
+        public virtual User UserCreated { get; set; }
+        public virtual User UserUpdated { get; set; }
 
         private ICollection<Photo> photos;
         public virtual ICollection<Photo> Photos
         {
             get { return photos ?? (photos = new HashSet<Photo>()); }
             set { photos = value; }
+        }
+
+        private ICollection<CampBatch> batches;
+        public virtual ICollection<CampBatch> Batches
+        {
+            get { return batches ?? (batches = new HashSet<CampBatch>()); }
+            set { batches = value; }
         }
     }
 }
