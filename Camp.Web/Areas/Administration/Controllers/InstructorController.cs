@@ -14,33 +14,33 @@ namespace Camp.Web.Areas.Administration.Controllers
 {
     [Area("Administration")]
     [Authorize]
-    public class InstructorRoleController : BaseController
+    public class InstructorController : BaseController
     {
-        public InstructorRoleController(ICampService svc, UserManager<User> userManager) : base(svc, userManager)
+        public InstructorController(ICampService svc, UserManager<User> userManager) : base(svc, userManager)
         {
 
         }
 
-        [Route("Administrace/Role-instruktoru")]
+        [Route("Administrace/Instruktori")]
         public IActionResult Index()
         {
-            return View(Svc.InstructorRoles.Items.Include(x => x.UserCreated).Include(x => x.UserUpdated));
+            return View(Svc.Instructors.Items.Include(x => x.UserCreated).Include(x => x.UserUpdated));
         }
 
-        [Route("Administrace/Role-instruktoru/Vytvorit")]
+        [Route("Administrace/Instruktori/Vytvorit")]
         public IActionResult Create()
         {
             return View();
         }
 
-        [Route("Administrace/Role-instruktoru/Vytvorit")]
+        [Route("Administrace/Instruktori/Vytvorit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(InstructorRole model)
+        public IActionResult Create(Instructor model)
         {
             if (ModelState.IsValid)
             {
-                Svc.CreateInstructorRole(model, User.GetUserId());
+                Svc.CreateInstructor(model, User.GetUserId());
                 Svc.Commit();
                 return RedirectToAction("Index");
             }
@@ -48,28 +48,29 @@ namespace Camp.Web.Areas.Administration.Controllers
             return View(model);
         }
 
-        [Route("Administrace/Role-instruktoru/Upravit/{id:int}")]
+        [Route("Administrace/Instruktori/Upravit/{id:int}")]
         public IActionResult Edit(int id)
         {
-            var model = Svc.InstructorRoles.FindById(id);
+            var model = Svc.Instructors.FindById(id);
             if (model == null)
                 return NotFound();
-            
+
             return View(model);
         }
 
-        [Route("Administrace/Role-instruktoru/Upravit/{id:int}")]
+        [Route("Administrace/Instruktori/Upravit/{id:int}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(InstructorRole model)
+        public IActionResult Edit(Instructor model)
         {
             if (ModelState.IsValid)
             {
                 model.UserUpdatedId = User.GetUserId();
-                Svc.InstructorRoles.Update(model);
+                Svc.Instructors.Update(model);
                 Svc.Commit();
                 return RedirectToAction("Index");
             }
+
             return View(model);
         }
 
@@ -77,25 +78,15 @@ namespace Camp.Web.Areas.Administration.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            var model = Svc.InstructorRoles.FindById(id);
+            var model = Svc.Instructors.FindById(id);
             if (model == null)
                 return NotFound();
 
-            Svc.DeleteInstructorRole(model, User.GetUserId());
+            model.UserDeletedId = User.GetUserId();
+            Svc.Instructors.Delete(model);
             Svc.Commit();
 
             return RedirectToAction("Index");
-        }
-
-        public JsonResult ChangeOrder(int id, bool up)
-        {
-            var model = Svc.InstructorRoles.FindById(id);
-            if (model == null)
-                return Json(false);
-
-            Svc.ChangeOrder(model, up, User.GetUserId());
-            Svc.Commit();
-            return Json(true);
         }
     }
 }

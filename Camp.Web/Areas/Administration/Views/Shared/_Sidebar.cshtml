@@ -25,19 +25,21 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+            <a class="nav-link" data-toggle="collapse" href="#ui-camps" aria-expanded="false" aria-controls="ui-camps">
                 <span class="menu-title">Tábory</span>
                 <i class="menu-arrow"></i>
                 <i class="mdi mdi-basecamp menu-icon"></i>
             </a>
-            <div class="collapse" id="ui-basic">
+            <div class="collapse" id="ui-camps">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item">
                         <a asp-area="Administration" asp-controller="Camp" asp-action="Index" class="nav-link">Seznam táborů</a>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="pages/ui-features/typography.html">Instruktoři</a></li>
                     <li class="nav-item">
-                    <a class="nav-link" asp-area="Administration" asp-controller="InstructorRole" asp-action="Index">Role instruktorů</a></li>
+                        <a class="nav-link" asp-area="Administration" asp-controller="Instructor" asp-action="Index">Instruktoři</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Administration" asp-controller="InstructorRole" asp-action="Index">Role instruktorů</a></li>
                     <li class="nav-item">
                         <a asp-area="Administration" asp-controller="CampCategory" asp-action="Index" class="nav-link">Kategorie táborů</a>
                     </li>

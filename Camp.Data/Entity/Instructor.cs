@@ -19,6 +19,7 @@ namespace Camp.Data.Entity
         public string Phone { get; set; }
         public DateTime? DateOfBirth { get; set; }
 
+        public virtual string Fullname => Title + (string.IsNullOrEmpty(Title)? "" : " ") + Firstname + " " + Lastname;
         public virtual User UserCreated { get; set; }
         public virtual User UserUpdated { get; set; }
 

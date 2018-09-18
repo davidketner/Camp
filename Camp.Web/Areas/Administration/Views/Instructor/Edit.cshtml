@@ -1,0 +1,61 @@
+﻿@model Camp.Data.Entity.Instructor
+@{
+    ViewData["Title"] = "Upravit instruktora";
+    ViewData["Icon"] = "mdi-lead-pencil";
+}
+<div class="row">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <form class="forms-sample" asp-controller="Instructor" asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Created" />
+                    <input type="hidden" asp-for="UserCreatedId" />
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="Title">Titul</label>
+                            <input type="text" asp-for="Title" class="form-control" placeholder="Titul">
+                            <span asp-validation-for="Title" class="invalid-field"></span>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="Firstname">Jméno</label>
+                            <input type="text" asp-for="Firstname" class="form-control" placeholder="Jméno">
+                            <span asp-validation-for="Firstname" class="invalid-field"></span>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="Lastname">Příjmení</label>
+                            <input type="text" asp-for="Lastname" class="form-control" placeholder="Příjmení">
+                            <span asp-validation-for="Lastname" class="invalid-field"></span>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="DateOfBirth">Datum narození</label>
+                            <input type="text" asp-for="DateOfBirth" class="form-control" placeholder="Datum narození">
+                            <span asp-validation-for="DateOfBirth" class="invalid-field"></span>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="Email">E-mail</label>
+                            <input type="text" asp-for="Email" class="form-control" placeholder="E-mail">
+                            <span asp-validation-for="Email" class="invalid-field"></span>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="Phone">Telefon</label>
+                            <input type="text" asp-for="Phone" class="form-control" placeholder="Telefon">
+                            <span asp-validation-for="Phone" class="invalid-field"></span>
+                        </div>
+                        <div class="form-group col-12">
+                            <label for="Facebook">Facebook</label>
+                            <input type="text" asp-for="Facebook" class="form-control" placeholder="Facebook">
+                            <span asp-validation-for="Facebook" class="invalid-field"></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-gradient-primary mr-2">Upravit</button>
+                    <a asp-area="Administration" asp-controller="Instructor" asp-action="Index" class="btn btn-light">Zpět</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

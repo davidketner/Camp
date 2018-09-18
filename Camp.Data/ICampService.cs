@@ -38,5 +38,7 @@ namespace Camp.Data
         ResultSvc<InstructorCamp> AddInstructorToCamp(int instructorId, int campBatchId, int instructorRoleId, string userId);
         ResultSvc<ObjectOrder> CreateObjectOrder(ObjectOrder objectOrder, string userId);
         ResultSvc<Payment> CreatePayment(Payment payment, string userId);
+        ResultSvc<InstructorRole> ChangeOrder(InstructorRole instructorRole, bool up, string userId);
+        ResultSvc<InstructorRole> DeleteInstructorRole(InstructorRole instructorRole, string userId);
     }
 }

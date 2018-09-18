@@ -84,7 +84,7 @@ namespace Camp.Data
                 if (!InstructorRoles.Items.Any(x => x.Name == role.Name.Trim()))
                 {
                     role.Name = role.Name?.Trim();
-                    role.Order = InstructorRoles.Items.Select(x => x.Order).DefaultIfEmpty(1).Max() + 1;
+                    role.Order = InstructorRoles.Items.Select(x => x.Order).DefaultIfEmpty(0).Max() + 1;
                     role.UserCreatedId = userId;
                     InstructorRoles.Add(role);
                 }
@@ -336,6 +336,53 @@ namespace Camp.Data
             catch (Exception e)
             {
                 Logger.LogError("Chyba při vytváření entity platba - " + e.Message);
+            }
+            return result;
+        }
+
+        public ResultSvc<InstructorRole> ChangeOrder(InstructorRole instructorRole, bool up, string userId)
+        {
+            var result = new ResultSvc<InstructorRole>(null, instructorRole);
+            try
+            {
+                if((instructorRole.Order == 1 && up) || (instructorRole.Order == InstructorRoles.Items.Select(x => x.Order).DefaultIfEmpty(1).Max() && !up))
+                {
+                    result.Errors.Add("Nelze změnit pořadí! Pořadí je již buď nejmenší nebo největší možné.");
+                }
+                else
+                {
+                    var iRole = InstructorRoles.Items.FirstOrDefault(x => x.Order == (up ? instructorRole.Order - 1 : instructorRole.Order + 1));
+                    iRole.Order = up ? iRole.Order + 1 : iRole.Order - 1;
+                    iRole.UserUpdatedId = userId;
+                    instructorRole.Order = up ? instructorRole.Order - 1 : instructorRole.Order + 1;
+                    instructorRole.UserUpdatedId = userId;
+                    InstructorRoles.Update(iRole);
+                    InstructorRoles.Update(instructorRole);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("Chyba při změny pořadí entity InstructorRole - " + e.Message);
+            }
+            return result;
+        }
+
+        public ResultSvc<InstructorRole> DeleteInstructorRole(InstructorRole instructorRole, string userId)
+        {
+            var result = new ResultSvc<InstructorRole>(null, instructorRole);
+            try
+            {
+                foreach (var ir in InstructorRoles.Items.Where(x => x.Order > instructorRole.Order))
+                {
+                    ir.Order--;
+                    InstructorRoles.Update(ir);
+                }
+                instructorRole.UserDeletedId = userId;
+                InstructorRoles.Delete(instructorRole);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("Chyba při mazání entity InstructorRole - " + e.Message);
             }
             return result;
         }
