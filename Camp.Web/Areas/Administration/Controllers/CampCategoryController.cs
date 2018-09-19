@@ -27,6 +27,7 @@ namespace Camp.Web.Areas.Administration.Controllers
         }
 
         [Route("Administrace/Kategorie-taboru/Vytvorit")]
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -48,6 +49,7 @@ namespace Camp.Web.Areas.Administration.Controllers
         }
 
         [Route("Administrace/Kategorie-taboru/Upravit/{id:int}")]
+        [HttpGet]
         public IActionResult Edit(int id)
         {
             var model = Svc.CampCategories.FindById(id);

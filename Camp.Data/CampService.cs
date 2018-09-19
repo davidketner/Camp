@@ -4,6 +4,7 @@ using Camp.Data.Entity;
 using Camp.Data.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Camp.Data
@@ -122,7 +123,7 @@ namespace Camp.Data
             var result = new ResultSvc<Instructor>(null, instructor);
             try
             {
-                if(!Instructors.Items.Any(x => x.Firstname == instructor.Firstname.Trim() && x.Lastname == instructor.Lastname.Trim() && x.Title == instructor.Title.Trim()))
+                if(!Instructors.Items.Any(x => x.Firstname == instructor.Firstname.Trim() && x.Lastname == instructor.Lastname.Trim() && (!string.IsNullOrEmpty(instructor.Title) && x.Title == instructor.Title.Trim())))
                 {
                     instructor.Firstname = instructor.Firstname?.Trim();
                     instructor.Lastname = instructor.Lastname?.Trim();
@@ -200,7 +201,7 @@ namespace Camp.Data
             var result = new ResultSvc<InstructorCamp>(null, new InstructorCamp { CampBatchId = campBatchId, InstructorId = instructorId, InstructorRoleId = instructorRoleId });
             try
             {
-                var campBatch = CampBatches.FindById(campBatchId);
+                var campBatch = CampBatches.Items.Include(x => x.InstructorCamps).FirstOrDefault(x => x.Id == campBatchId);
                 if(!campBatch.InstructorCamps.Any(x => x.InstructorId == instructorId && x.InstructorRoleId == instructorRoleId))
                 {
                     campBatch.InstructorCamps.Add(new InstructorCamp { InstructorId = instructorId, InstructorRoleId = instructorRoleId });
@@ -301,7 +302,7 @@ namespace Camp.Data
 
                 foreach (var _object in objectOrder.Objects)
                 {
-                    var obj = Objects.FindById(_object.ObjectId);
+                    var obj = Objects.Items.Include(x => x.ObjectType).FirstOrDefault(x => x.Id == _object.ObjectId);
                     if (obj.ObjectType.Capacity < _object.TotalPayingPersons)
                         result.Errors.Add("Zvolené ubytování nemá tak velkou kapacitu.");
                     if (!obj.IsAvailable(objectOrder.From, objectOrder.To))
@@ -362,7 +363,7 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při změny pořadí entity InstructorRole - " + e.Message);
+                Logger.LogError("Chyba při změny pořadí entity instruktor role - " + e.Message);
             }
             return result;
         }
@@ -383,6 +384,28 @@ namespace Camp.Data
             catch (Exception e)
             {
                 Logger.LogError("Chyba při mazání entity InstructorRole - " + e.Message);
+            }
+            return result;
+        }
+
+        public ResultSvc<CampBatch> CreateCampBatch(CampBatch campBatch, string userId)
+        {
+            var result = new ResultSvc<CampBatch>(null, campBatch);
+            try
+            {
+                if (!CampBatches.Items.Any(x => x.Batch == campBatch.Batch && x.CampId == campBatch.CampId && x.From == campBatch.From && x.To == campBatch.To))
+                {
+                    campBatch.UserCreatedId = userId;
+                    CampBatches.Add(campBatch);
+                }
+                else
+                {
+                    result.Errors.Add("Tento turnus ve stejném datu již existuje!");
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("Chyba při vytváření entity turnusu - " + e.Message);
             }
             return result;
         }

@@ -1,0 +1,153 @@
+﻿@model Camp.Data.Entity.CampBatch
+@{
+    ViewData["Title"] = "Instruktoři";
+    ViewData["Icon"] = "mdi-plus-circle";
+}
+
+<div class="row">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="Batch">Instruktor</label>
+                        <select class="form-control" name="InstructorId" id="InstructorId"
+                                asp-items="@ViewBag.Instructors"></select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="CampId">Role instruktora</label>
+                        <select class="form-control" name="InstructorRoleId" id="InstructorRoleId"
+                                asp-items="@ViewBag.InstructorRoles"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="text-danger col-md-12 mb-2" id="errors"></span>
+                </div>
+                <button type="button" class="btn btn-gradient-primary mr-2" onclick="addInstructor(@Model.Id)">Přidat instruktora</button>
+                <a asp-area="Administration" asp-controller="CampBatch" asp-action="Index" class="btn btn-light">Zpět</a>
+
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <td>
+                                    Role
+                                </td>
+                                <th>
+                                    Jméno
+                                </th>
+                                <th>
+                                    Datum narození
+                                </th>
+                                <th>
+                                    E-mail
+                                </th>
+                                <th>
+                                    Telefon
+                                </th>
+                                <th>
+                                    Facebook
+                                </th>
+                                <th>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.InstructorCamps.OrderBy(x => x.InstructorRole.Order))
+                            {
+                                Uri uriResult;
+                                bool result = Uri.TryCreate(item.Instructor.Facebook, UriKind.Absolute, out uriResult)
+                                    && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+                                <tr>
+                                    <td>
+                                        @item.InstructorRole.Name
+                                    </td>
+                                    <td>
+                                        @item.Instructor.Fullname
+                                    </td>
+                                    <td>
+                                        @(item.Instructor.DateOfBirth.HasValue ? item.Instructor.DateOfBirth.Value.ToShortDateString() : "")
+                                    </td>
+                                    <td>
+                                        @item.Instructor.Email
+                                    </td>
+                                    <td>
+                                        @item.Instructor.Phone
+                                    </td>
+                                    <td>
+                                        @if (result)
+                                        {
+                                            <a href="@uriResult.AbsoluteUri" target="_blank">Odkaz</a>
+                                        }
+
+                                    </td>
+                                    <td>
+                                        <ul class="list-inline float-right pr-2">
+                                            <li class="list-inline-item">
+                                                <i class="mdi mdi-delete text-danger pointer" title="Odebrat" data-name="@item.Instructor.Fullname" data-instructorId="@item.InstructorId" data-instructorRoleId="@item.InstructorRoleId" data-toggle="modal" data-target="#deleteModal" onclick="deleteItem(this)"></i>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form asp-controller="CampBatch" asp-action="DeleteInstructor" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Smazat</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="campBatchId" value="@Model.Id" />
+                        <input type="hidden" name="instructorId" id="deleteInstructorId" />
+                        <input type="hidden" name="instructorRoleId" id="deleteInstructorRoleId" />
+                        Opravdu chcete smazat instruktora <strong id="deleteItem"></strong>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zrušit</button>
+                        <button type="submit" class="btn btn-danger">Smazat</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function addInstructor(id) {
+            var instructorId = $("#InstructorId").val();
+            var instructorRoleId = $("#InstructorRoleId").val();
+            if (instructorId === "" || instructorRoleId === "") {
+                $("#errors").html("Vyplňte obě pole!");
+            } else {
+                $.post("@Url.Action("AddInstructor", "CampBatch")", { id: id, instructorId: instructorId, instructorRoleId: instructorRoleId }, function (data) {
+                    if (data.isOK) {
+                        location.reload();
+                    } else {
+                        $("#errors").html(data.message);
+                    }
+               });
+            }
+            
+        }
+
+        function deleteItem(e) {
+            $("#deleteItem").html($(e).attr('data-name'));
+            $("#deleteInstructorId").val($(e).attr('data-instructorId'));
+            $("#deleteInstructorRoleId").val($(e).attr('data-instructorRoleId'));
+        }
+    </script>
+}
+

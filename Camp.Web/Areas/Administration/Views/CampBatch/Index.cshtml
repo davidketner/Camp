@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Camp.Data.Entity.InstructorRole>
+﻿@model IEnumerable<Camp.Data.Entity.CampBatch>
 @{
     ViewData["Title"] = "Tábory";
     ViewData["Icon"] = "mdi-basecamp";
@@ -8,10 +8,10 @@
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Role instruktorů</h4>
+                <h4 class="card-title">Seznam turnusů</h4>
                 <p class="card-description">
-                    <a asp-area="Administration" asp-controller="InstructorRole" asp-action="Create" class="no-underline">
-                        <small>Vytvořit novou roli instruktorů</small>
+                    <a asp-area="Administration" asp-controller="CampBatch" asp-action="Create" class="no-underline">
+                        <small>Vytvořit nový turnus</small>
                     </a>
                 </p>
                 <div class="table-responsive">
@@ -19,50 +19,63 @@
                         <thead>
                             <tr>
                                 <th>
+                                    Termín
+                                </th>
+                                <th>
+                                    Turnus
+                                </th>
+                                <th>
                                     Název
                                 </th>
                                 <th>
-                                    Poslední úprava
+                                    Kategorie
                                 </th>
                                 <th>
-                                    Upravil
+                                    Kapacita
+                                </th>
+                                <th>
+                                    Cena
                                 </th>
                                 <th>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.OrderBy(x => x.Order))
+                            @foreach (var item in Model.OrderByDescending(x => x.From))
                             {
                                 <tr>
                                     <td>
-                                        @item.Name
+                                        @item.From.ToShortDateString()  - @item.To.Date.ToShortDateString()
                                     </td>
                                     <td>
-                                        @(item.Updated.HasValue ? item.Updated : item.Created)
+                                        @item.Batch
                                     </td>
                                     <td>
-                                        @(string.IsNullOrEmpty(item.UserUpdatedId) ? item.UserCreated.Fullname : item.UserUpdated.Fullname)
+                                        @item.Camp.Name
                                     </td>
                                     <td>
-                                        @{ 
-                                            var isFirst = item.Order == 1;
-                                            var isLast = item.Order == Model.Select(x => x.Order).DefaultIfEmpty(1).Max();
-                                        }
+                                        @item.Camp.CampCategory.Name
+                                    </td>
+                                    <td>
+                                        @item.Capacity
+                                    </td>
+                                    <td>
+                                        @item.Price.ToString("N") Kč
+                                    </td>
+                                    <td>
                                         <ul class="list-inline float-right pr-2">
-                                            <li class="list-inline-item @(isFirst? "text-muted" : "text-primary pointer")">
-                                                <i class="mdi mdi-arrow-up-bold-circle-outline" title="@(!isFirst? "Posunout v pořadí nahoru" : "")" onclick="@(!isFirst? "changeOrder(" + item.Id + ", true)" : "")"></i>
-                                            </li>
-                                            <li class="list-inline-item @(isLast? "text-muted" : "text-primary pointer")">
-                                                <i class="mdi mdi-arrow-down-bold-circle-outline" title="@(!isLast? "Posunout v pořadí dolů" : "")" onclick="@(!isLast? "changeOrder(" + item.Id + ", false)" : "")"></i>
+                                            <li class="list-inline-item">
+                                                <a asp-area="Administration" asp-controller="CampBatch" asp-action="Instructors" asp-route-id="@item.Id" class="text-primary" title="Instruktoři">
+                                                    <i class="mdi mdi-basecamp"></i>
+                                                </a>
                                             </li>
                                             <li class="list-inline-item">
-                                                <a asp-area="Administration" asp-controller="InstructorRole" asp-action="Edit" asp-route-id="@item.Id" class="text-primary" title="Upravit">
+                                                <a asp-area="Administration" asp-controller="CampBatch" asp-action="Edit" asp-route-id="@item.Id" class="text-primary" title="Upravit">
                                                     <i class="mdi mdi-lead-pencil"></i>
                                                 </a>
                                             </li>
                                             <li class="list-inline-item">
-                                                <i class="mdi mdi-delete text-danger pointer" title="Smazat" data-name="@item.Name" data-id="@item.Id" data-toggle="modal" data-target="#deleteModal" onclick="deleteItem(this)"></i>
+                                                <i class="mdi mdi-delete text-danger pointer" title="Smazat" data-name="@item.Batch. turnus @item.From.ToShortDateString() - @item.To.ToShortDateString() @item.Camp.Name" data-id="@item.Id" data-toggle="modal" data-target="#deleteModal" onclick="deleteItem(this)"></i>
                                             </li>
                                         </ul>
                                     </td>
@@ -79,7 +92,7 @@
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form asp-controller="InstructorRole" asp-action="Delete" method="post">
+                <form asp-controller="CampBatch" asp-action="Delete" method="post">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Smazat</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -88,7 +101,7 @@
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="id" id="deleteId" />
-                        Opravdu chcete smazat roli instruktorů <strong id="deleteItem"></strong>?
+                        Opravdu chcete smazat <strong id="deleteItem"></strong>?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Zrušit</button>
@@ -105,14 +118,6 @@
         function deleteItem(e) {
             $("#deleteItem").html($(e).attr('data-name'));
             $("#deleteId").val($(e).attr('data-id'));
-        }
-
-        function changeOrder(id, up) {
-            $.post("@Url.Action("ChangeOrder", "InstructorRole")", { id: id, up: up }, function (data) {
-                if (data) {
-                    location.reload();
-                }
-            });
         }
     </script>
 }

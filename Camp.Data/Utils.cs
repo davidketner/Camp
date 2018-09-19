@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Camp.Data
 {
     public class ResultSvc<T>
     {
-        public bool IsOK => Errors.Count == 0;
+        public virtual bool IsOK => Errors.Count == 0;
         public T Obj { get; set; }
         private ICollection<string> errors;
         public virtual ICollection<string> Errors
@@ -20,5 +21,7 @@ namespace Camp.Data
             this.Errors = Errors;
             this.Obj = Obj;
         }
+
+        public virtual string Message => !IsOK ? Errors.Aggregate((i, j) => i + " " + j) : "";
     }
 }

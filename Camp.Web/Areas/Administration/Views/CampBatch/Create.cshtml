@@ -1,0 +1,60 @@
+﻿@model Camp.Data.Entity.CampBatch
+@{
+    ViewData["Title"] = "Vytvořit turnus";
+    ViewData["Icon"] = "mdi-plus-circle";
+}
+
+<div class="row">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <form class="forms-sample" asp-controller="CampBatch" asp-action="Create" method="post">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="From">Termín od</label>
+                            <input type="text" asp-for="From" class="form-control" placeholder="Termín od">
+                            <span asp-validation-for="From" class="invalid-field"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="To">Termín do</label>
+                            <input type="text" asp-for="To" class="form-control" placeholder="Termín do">
+                            <span asp-validation-for="To" class="invalid-field"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="Batch">Turnus (pořadí)</label>
+                            <input type="number" asp-for="Batch" class="form-control" placeholder="Turnus (pořadí)">
+                            <span asp-validation-for="Batch" class="invalid-field"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="CampId">Název táboru</label>
+                            <select class="form-control" asp-for="CampId"
+                                    asp-items="@ViewBag.Camps"></select>
+                            <span asp-validation-for="CampId" class="invalid-field"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="Capacity">Kapacita</label>
+                            <input type="number" asp-for="Capacity" class="form-control" placeholder="Kapacita">
+                            <span asp-validation-for="Capacity" class="invalid-field"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="Price">Cena</label>
+                            <input type="number" asp-for="Price" class="form-control" placeholder="Cena">
+                            <span asp-validation-for="Price" class="invalid-field"></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-gradient-primary mr-2">Vytvořit</button>
+                    <a asp-area="Administration" asp-controller="CampBatch" asp-action="Index" class="btn btn-light">Zpět</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+

@@ -22,6 +22,7 @@
                             <label for="CampCategoryId">Kategorie</label>
                             <select class="form-control" asp-for="CampCategoryId"
                                     asp-items="@ViewBag.Categories"></select>
+                            <span asp-validation-for="CampCategoryId" class="invalid-field"></span>
                         </div>
                         <div class="form-group col-md-4">
                             <div class="form-check">

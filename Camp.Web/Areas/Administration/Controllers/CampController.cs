@@ -30,6 +30,7 @@ namespace Camp.Web.Areas.Administration.Controllers
         }
 
         [Route("Administrace/Tabory/Vytvorit")]
+        [HttpGet]
         public IActionResult Create()
         {
             ViewBag.Categories = new SelectList(Svc.CampCategories.Items, "Id", "Name");
@@ -53,6 +54,7 @@ namespace Camp.Web.Areas.Administration.Controllers
         }
 
         [Route("Administrace/Tabory/Upravit/{id:int}")]
+        [HttpGet]
         public IActionResult Edit(int id)
         {
             var model = Svc.Camps.FindById(id);

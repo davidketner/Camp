@@ -33,13 +33,17 @@
             <div class="collapse" id="ui-camps">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item">
+                        <a asp-area="Administration" asp-controller="CampBatch" asp-action="Index" class="nav-link">Seznam turnusů</a>
+                    </li>
+                    <li class="nav-item">
                         <a asp-area="Administration" asp-controller="Camp" asp-action="Index" class="nav-link">Seznam táborů</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-area="Administration" asp-controller="Instructor" asp-action="Index">Instruktoři</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Administration" asp-controller="InstructorRole" asp-action="Index">Role instruktorů</a></li>
+                        <a class="nav-link" asp-area="Administration" asp-controller="InstructorRole" asp-action="Index">Role instruktorů</a>
+                    </li>
                     <li class="nav-item">
                         <a asp-area="Administration" asp-controller="CampCategory" asp-action="Index" class="nav-link">Kategorie táborů</a>
                     </li>

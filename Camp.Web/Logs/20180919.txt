@@ -1,0 +1,2 @@
+2018-09-19T08:33:37.8553693+02:00  [ERR] Chyba při vytváření entity instruktor - An exception was thrown while attempting to evaluate a LINQ query parameter expression. To show additional information call EnableSensitiveDataLogging() when overriding DbContext.OnConfiguring. (1b1d7ec6)
+2018-09-19T08:35:17.1308186+02:00  [ERR] Chyba při vytváření entity instruktor - An exception was thrown while attempting to evaluate a LINQ query parameter expression. To show additional information call EnableSensitiveDataLogging() when overriding DbContext.OnConfiguring. (1b1d7ec6)
