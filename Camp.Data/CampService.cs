@@ -409,5 +409,10 @@ namespace Camp.Data
             }
             return result;
         }
+
+        public virtual ResultSvc<InstructorCamp> RemoveInstructorCampBatch(int campBatchId, int instructorId, int instructorRoleId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

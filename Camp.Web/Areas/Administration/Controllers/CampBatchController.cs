@@ -115,14 +115,7 @@ namespace Camp.Web.Areas.Administration.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteInstructor(int campBatchId, int instructorId, int instructorRoleId)
         {
-            var model = Svc.CampBatches.Items.Include(x => x.InstructorCamps).FirstOrDefault(x => x.Id == campBatchId);
-            if (model == null)
-                return NotFound();
-
-            var ic = model.InstructorCamps.FirstOrDefault(x => x.InstructorId == instructorId && x.InstructorRoleId == instructorRoleId);
-            model.InstructorCamps.Remove(ic);
-            model.UserUpdatedId = User.GetUserId();
-            Svc.CampBatches.Update(model);
+            Svc.RemoveInstructorCampBatch(campBatchId, instructorId, instructorRoleId);
             Svc.Commit();
 
             return RedirectToAction("Instructors", new { @id = campBatchId });

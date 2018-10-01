@@ -1,17 +1,17 @@
-﻿@model IEnumerable<Camp.Data.Entity.CampBatch>
+﻿@model IEnumerable<Camp.Data.Entity.Diet>
 @{
-    ViewData["Title"] = "Tábory";
-    ViewData["Icon"] = "mdi-basecamp";
+    ViewData["Title"] = "Strava";
+    ViewData["Icon"] = "mdi-bowl";
 }
 
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Seznam turnusů</h4>
+                <h4 class="card-title">Strava</h4>
                 <p class="card-description">
-                    <a asp-area="Administration" asp-controller="CampBatch" asp-action="Create" class="no-underline">
-                        <small>Vytvořit nový turnus</small>
+                    <a asp-area="Administration" asp-controller="Diet" asp-action="Create" class="no-underline">
+                        <small>Vytvořit novou stravu</small>
                     </a>
                 </p>
                 <div class="table-responsive">
@@ -19,63 +19,52 @@
                         <thead>
                             <tr>
                                 <th>
-                                    Termín
-                                </th>
-                                <th>
-                                    Turnus
-                                </th>
-                                <th>
                                     Název
                                 </th>
                                 <th>
-                                    Kategorie
+                                    Cena pro dospělé
                                 </th>
                                 <th>
-                                    Kapacita
+                                    Cena pro děti
                                 </th>
                                 <th>
-                                    Cena
+                                    Poslední úprava
+                                </th>
+                                <th>
+                                    Upravil
                                 </th>
                                 <th>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.OrderByDescending(x => x.From))
+                            @foreach (var item in Model)
                             {
                                 <tr>
                                     <td>
-                                        @item.From.ToShortDateString()  - @item.To.Date.ToShortDateString()
+                                        @item.Name
                                     </td>
                                     <td>
-                                        @item.Batch
+                                        @item.PersonPrice.ToString("N") Kč
                                     </td>
                                     <td>
-                                        @item.Camp.Name
+                                        @item.ChildrenPrice.ToString("N") Kč
                                     </td>
                                     <td>
-                                        @item.Camp.CampCategory.Name
+                                        @(item.Updated.HasValue ? item.Updated : item.Created)
                                     </td>
                                     <td>
-                                        @item.Capacity
-                                    </td>
-                                    <td>
-                                        @item.Price.ToString("N") Kč
+                                        @(string.IsNullOrEmpty(item.UserUpdatedId) ? item.UserCreated.Fullname : item.UserUpdated.Fullname)
                                     </td>
                                     <td>
                                         <ul class="list-inline float-right pr-2">
                                             <li class="list-inline-item">
-                                                <a asp-area="Administration" asp-controller="CampBatch" asp-action="Instructors" asp-route-id="@item.Id" class="text-primary" title="Instruktoři">
-                                                    <i class="mdi mdi-account"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a asp-area="Administration" asp-controller="CampBatch" asp-action="Edit" asp-route-id="@item.Id" class="text-primary" title="Upravit">
+                                                <a asp-area="Administration" asp-controller="Diet" asp-action="Edit" asp-route-id="@item.Id" class="text-primary" title="Upravit">
                                                     <i class="mdi mdi-lead-pencil"></i>
                                                 </a>
                                             </li>
                                             <li class="list-inline-item">
-                                                <i class="mdi mdi-delete text-danger pointer" title="Smazat" data-name="@item.Batch. turnus @item.From.ToShortDateString() - @item.To.ToShortDateString() @item.Camp.Name" data-id="@item.Id" data-toggle="modal" data-target="#deleteModal" onclick="deleteItem(this)"></i>
+                                                <i class="mdi mdi-delete text-danger pointer" title="Smazat" data-name="@item.Name" data-id="@item.Id" data-toggle="modal" data-target="#deleteModal" onclick="deleteItem(this)"></i>
                                             </li>
                                         </ul>
                                     </td>
@@ -92,7 +81,7 @@
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form asp-controller="CampBatch" asp-action="Delete" method="post">
+                <form asp-controller="Diet" asp-action="Delete" method="post">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Smazat</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -101,7 +90,7 @@
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="id" id="deleteId" />
-                        Opravdu chcete smazat <strong id="deleteItem"></strong>?
+                        Opravdu chcete smazat stravu <strong id="deleteItem"></strong>?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Zrušit</button>

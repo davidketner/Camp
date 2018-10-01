@@ -25,14 +25,14 @@
                 </div>
                 <button type="button" class="btn btn-gradient-primary mr-2" onclick="addInstructor(@Model.Id)">Přidat instruktora</button>
                 <a asp-area="Administration" asp-controller="CampBatch" asp-action="Index" class="btn btn-light">Zpět</a>
-
+                <hr />
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <td>
+                                <th>
                                     Role
-                                </td>
+                                </th>
                                 <th>
                                     Jméno
                                 </th>
@@ -84,7 +84,7 @@
                                     <td>
                                         <ul class="list-inline float-right pr-2">
                                             <li class="list-inline-item">
-                                                <i class="mdi mdi-delete text-danger pointer" title="Odebrat" data-name="@item.Instructor.Fullname" data-instructorId="@item.InstructorId" data-instructorRoleId="@item.InstructorRoleId" data-toggle="modal" data-target="#deleteModal" onclick="deleteItem(this)"></i>
+                                                <i class="mdi mdi-account-remove text-danger pointer" title="Odebrat" data-name="@item.Instructor.Fullname" data-instructorId="@item.InstructorId" data-instructorRoleId="@item.InstructorRoleId" data-toggle="modal" data-target="#deleteModal" onclick="deleteItem(this)"></i>
                                             </li>
                                         </ul>
                                     </td>
@@ -112,7 +112,7 @@
                         <input type="hidden" name="campBatchId" value="@Model.Id" />
                         <input type="hidden" name="instructorId" id="deleteInstructorId" />
                         <input type="hidden" name="instructorRoleId" id="deleteInstructorRoleId" />
-                        Opravdu chcete smazat instruktora <strong id="deleteItem"></strong>?
+                        Opravdu chcete odebrat instruktora <strong id="deleteItem"> z tohoto turnusu</strong>?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Zrušit</button>

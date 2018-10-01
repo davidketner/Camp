@@ -1,7 +1,9 @@
-﻿using Camp.Data.Repositories;
+﻿using Camp.Data.Entity;
+using Camp.Data.Repositories;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Camp.Data
@@ -35,6 +37,28 @@ namespace Camp.Data
         public override void Dispose()
         {
             DbContext.Dispose();
+        }
+
+        public override ResultSvc<InstructorCamp> RemoveInstructorCampBatch(int campBatchId, int instructorId, int instructorRoleId)
+        {
+            var instructorCamp = DbContext.InstructorCamps.FirstOrDefault(x => x.CampBatchId == campBatchId && x.InstructorId == instructorId && x.InstructorRoleId == instructorRoleId);
+            var result = new ResultSvc<InstructorCamp>(null, instructorCamp);
+            try
+            {
+                if(instructorCamp == null)
+                {
+                    result.Errors.Add("Nenalezeno");
+                }
+                else
+                {
+                    DbContext.InstructorCamps.Remove(instructorCamp);
+                }
+            }
+            catch
+            {
+
+            }
+            return result;
         }
     }
 }
