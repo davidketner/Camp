@@ -40,7 +40,7 @@ namespace Camp.Web.Areas.Administration.Controllers
         {
             if (ModelState.IsValid)
             {
-                Svc.CreateCampCategory(model, User.GetUserId());
+                Svc.CreateCampCategory(model);
                 Svc.Commit();
                 return RedirectToAction("Index");
             }

@@ -25,24 +25,9 @@ namespace Camp.Data
         public IPaymentRepository Payments { get; set; }
         public IPhotoRepository Photos { get; set; }
         public IHttpContextAccessor Context { get; set; }
+        public ILogger Logger { get; set; }
+        public ILoggerFactory LoggerFactory { get; set; }
         public UserManager<User> UserManager { get; set; }
-
-        private static ILoggerFactory _Factory = null;
-        public static ILoggerFactory LoggerFactory
-        {
-            get
-            {
-                if (_Factory == null)
-                {
-                    _Factory = new LoggerFactory();
-                    _Factory.AddFile("Logs/{Date}.txt");
-                }
-                return _Factory;
-            }
-            set { _Factory = value; }
-        }
-
-        public ILogger Logger => LoggerFactory.CreateLogger("Log");
 
         public virtual void Commit()
         {
@@ -56,7 +41,7 @@ namespace Camp.Data
 
         public ResultSvc<Diet> CreateDiet(Diet diet)
         {
-            var result = new ResultSvc<Diet>(null, diet);
+            var result = new ResultSvc<Diet>(diet);
             try
             {
                 if (!Diets.Items.Any(x => x.Name == diet.Name.Trim()))
@@ -72,21 +57,21 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při vytváření entity strava - " + e.Message);
+                Logger.LogError(e.Message);
             }
             return result;
         }
 
-        public ResultSvc<InstructorRole> CreateInstructorRole(InstructorRole role, string userId)
+        public ResultSvc<InstructorRole> CreateInstructorRole(InstructorRole role)
         {
-            var result = new ResultSvc<InstructorRole>(null, role);
+            var result = new ResultSvc<InstructorRole>(role);
             try
             {
                 if (!InstructorRoles.Items.Any(x => x.Name == role.Name.Trim()))
                 {
                     role.Name = role.Name?.Trim();
                     role.Order = InstructorRoles.Items.Select(x => x.Order).DefaultIfEmpty(0).Max() + 1;
-                    role.UserCreatedId = userId;
+                    role.UserCreatedId = Context.HttpContext.User.GetUserId();
                     InstructorRoles.Add(role);
                 }
                 else
@@ -96,31 +81,31 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při vytváření entity instruktor role - " + e.Message);
+                Logger.LogError(e.Message);
             }
             return result;
         }
 
-        public ResultSvc<Photo> CreatePhoto(Photo photo, string userId)
+        public ResultSvc<Photo> CreatePhoto(Photo photo)
         {
-            var result = new ResultSvc<Photo>(null, photo);
+            var result = new ResultSvc<Photo>(photo);
             try
             {
                 photo.Name = photo.Name?.Trim();
                 photo.Description = photo.Description?.Trim();
-                photo.UserCreatedId = userId;
+                photo.UserCreatedId = Context.HttpContext.User.GetUserId();
                 Photos.Add(photo);
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při vytváření entity fotografie - " + e.Message);
+                Logger.LogError(e.Message);
             }
             return result;
         }
 
-        public ResultSvc<Instructor> CreateInstructor(Instructor instructor, string userId)
+        public ResultSvc<Instructor> CreateInstructor(Instructor instructor)
         {
-            var result = new ResultSvc<Instructor>(null, instructor);
+            var result = new ResultSvc<Instructor>(instructor);
             try
             {
                 if(!Instructors.Items.Any(x => x.Firstname == instructor.Firstname.Trim() && x.Lastname == instructor.Lastname.Trim() && (!string.IsNullOrEmpty(instructor.Title) && x.Title == instructor.Title.Trim())))
@@ -132,7 +117,7 @@ namespace Camp.Data
                     instructor.Email = instructor.Email?.Trim();
                     instructor.Phone = instructor.Phone?.Trim();
                     instructor.Facebook = instructor.Facebook?.Trim();
-                    instructor.UserCreatedId = userId;
+                    instructor.UserCreatedId = Context.HttpContext.User.GetUserId();
                     Instructors.Add(instructor);
                 }
                 else
@@ -142,20 +127,20 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při vytváření entity instruktor - " + e.Message);
+                Logger.LogError(e.Message);
             }
             return result;
         }
 
-        public ResultSvc<CampCategory> CreateCampCategory(CampCategory campCategory, string userId)
+        public ResultSvc<CampCategory> CreateCampCategory(CampCategory campCategory)
         {
-            var result = new ResultSvc<CampCategory>(null, campCategory);
+            var result = new ResultSvc<CampCategory>(campCategory);
             try
             {
                 if (!CampCategories.Items.Any(x => x.Name == campCategory.Name.Trim()))
                 {
                     campCategory.Name = campCategory.Name?.Trim();
-                    campCategory.UserCreatedId = userId;
+                    campCategory.UserCreatedId = Context.HttpContext.User.GetUserId();
                     CampCategories.Add(campCategory);
                 }
                 else
@@ -165,14 +150,14 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při vytváření entity kategorie tábor - " + e.Message);
+                Logger.LogError(e.Message);
             }
             return result;
         }
 
-        public ResultSvc<Entity.Camp> CreateCamp(Entity.Camp camp, string userId)
+        public ResultSvc<Entity.Camp> CreateCamp(Entity.Camp camp)
         {
-            var result = new ResultSvc<Entity.Camp>(null, camp);
+            var result = new ResultSvc<Entity.Camp>(camp);
             try
             {
                 if(!Camps.Items.Any(x => x.Name == camp.Name.Trim() && x.CampCategoryId == camp.CampCategoryId))
@@ -181,7 +166,7 @@ namespace Camp.Data
                     camp.Description = camp.Description?.Trim();
                     camp.OrganizationalInformation = camp.OrganizationalInformation?.Trim();
                     camp.Schedule = camp.Schedule?.Trim();
-                    camp.UserCreatedId = userId;
+                    camp.UserCreatedId = Context.HttpContext.User.GetUserId();
                     Camps.Add(camp);
                 }
                 else
@@ -191,21 +176,21 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při vytváření entity tábor - " + e.Message);
+                Logger.LogError(e.Message);
             }
             return result;
         }
 
-        public ResultSvc<InstructorCamp> AddInstructorToCamp(int instructorId, int campBatchId, int instructorRoleId, string userId)
+        public ResultSvc<InstructorCamp> AddInstructorToCamp(int instructorId, int campBatchId, int instructorRoleId)
         {
-            var result = new ResultSvc<InstructorCamp>(null, new InstructorCamp { CampBatchId = campBatchId, InstructorId = instructorId, InstructorRoleId = instructorRoleId });
+            var result = new ResultSvc<InstructorCamp>(new InstructorCamp { CampBatchId = campBatchId, InstructorId = instructorId, InstructorRoleId = instructorRoleId });
             try
             {
                 var campBatch = CampBatches.Items.Include(x => x.InstructorCamps).FirstOrDefault(x => x.Id == campBatchId);
                 if(!campBatch.InstructorCamps.Any(x => x.InstructorId == instructorId && x.InstructorRoleId == instructorRoleId))
                 {
                     campBatch.InstructorCamps.Add(new InstructorCamp { InstructorId = instructorId, InstructorRoleId = instructorRoleId });
-                    campBatch.UserUpdatedId = userId;
+                    campBatch.UserUpdatedId = Context.HttpContext.User.GetUserId();
                     CampBatches.Update(campBatch);
                 }
                 else
@@ -215,21 +200,21 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při vytváření entity instruktor tábor - " + e.Message);
+                Logger.LogError(e.Message);
             }
             return result;
         }
 
-        public ResultSvc<ObjectType> CreateObjectType(ObjectType objectType, string userId)
+        public ResultSvc<ObjectType> CreateObjectType(ObjectType objectType)
         {
-            var result = new ResultSvc<ObjectType>(null, objectType);
+            var result = new ResultSvc<ObjectType>(objectType);
             try
             {
                 if(!ObjectTypes.Items.Any(x => x.Name == objectType.Name.Trim() && x.Capacity == objectType.Capacity))
                 {
                     objectType.Name = objectType.Name?.Trim();
                     objectType.ObjectsName = objectType.ObjectsName?.Trim();
-                    objectType.UserCreatedId = userId;
+                    objectType.UserCreatedId = Context.HttpContext.User.GetUserId();
                     ObjectTypes.Add(objectType);
                 }
                 else
@@ -239,20 +224,20 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při vytváření entity objekt - " + e.Message);
+                Logger.LogError(e.Message);
             }
             return result;
         }
 
-        public ResultSvc<Entity.Object> CreateObject(Entity.Object _object, string userId)
+        public ResultSvc<Entity.Object> CreateObject(Entity.Object _object)
         {
-            var result = new ResultSvc<Entity.Object>(null, _object);
+            var result = new ResultSvc<Entity.Object>(_object);
             try
             {
                 if (!Objects.Items.Any(x => x.Mark == _object.Mark.Trim() && x.ObjectTypeId == _object.ObjectTypeId))
                 {
                     _object.Mark = _object.Mark?.Trim();
-                    _object.UserCreatedId = userId;
+                    _object.UserCreatedId = Context.HttpContext.User.GetUserId();
                     Objects.Add(_object);
                 }
                 else
@@ -262,19 +247,19 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při vytváření entity objektový typ - " + e.Message);
+                Logger.LogError(e.Message);
             }
             return result;
         }
 
-        public ResultSvc<ObjectTypePrice> CreateObjectTypePrice(ObjectTypePrice objectTypePrice, string userId)
+        public ResultSvc<ObjectTypePrice> CreateObjectTypePrice(ObjectTypePrice objectTypePrice)
         {
-            var result = new ResultSvc<ObjectTypePrice>(null, objectTypePrice);
+            var result = new ResultSvc<ObjectTypePrice>(objectTypePrice);
             try
             {
                 if(!ObjectTypePrices.Items.Any(x => x.PersonsCount == objectTypePrice.PersonsCount && x.MinNights == objectTypePrice.MinNights && x.MaxNights == objectTypePrice.MaxNights && x.ObjectTypeId == objectTypePrice.ObjectTypeId))
                 {
-                    objectTypePrice.UserCreatedId = userId;
+                    objectTypePrice.UserCreatedId = Context.HttpContext.User.GetUserId();
                     ObjectTypePrices.Add(objectTypePrice);
                 }
                 else
@@ -284,14 +269,14 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při vytváření entity objektový typ cena - " + e.Message);
+                Logger.LogError(e.Message);
             }
             return result;
         }
 
-        public ResultSvc<ObjectOrder> CreateObjectOrder(ObjectOrder objectOrder, string userId)
+        public ResultSvc<ObjectOrder> CreateObjectOrder(ObjectOrder objectOrder)
         {
-            var result = new ResultSvc<ObjectOrder>(null, objectOrder);
+            var result = new ResultSvc<ObjectOrder>(objectOrder);
             try
             {
                 if (!objectOrder.Objects.Any())
@@ -315,35 +300,35 @@ namespace Camp.Data
                     objectOrder.Lastname = objectOrder.Lastname?.Trim();
                     objectOrder.Telephone = objectOrder.Telephone?.Trim();
                     objectOrder.Email = objectOrder.Email?.Trim();
-                    objectOrder.UserCreatedId = userId;
+                    objectOrder.UserCreatedId = Context.HttpContext.User.GetUserId();
                     ObjectOrders.Add(objectOrder);
                 }
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při vytváření entity objektová objednávka - " + e.Message);
+                Logger.LogError(e.Message);
             }
             return result;
         }
 
-        public ResultSvc<Payment> CreatePayment(Payment payment, string userId)
+        public ResultSvc<Payment> CreatePayment(Payment payment)
         {
-            var result = new ResultSvc<Payment>(null, payment);
+            var result = new ResultSvc<Payment>(payment);
             try
             {
-                payment.UserCreatedId = userId;
+                payment.UserCreatedId = Context.HttpContext.User.GetUserId();
                 Payments.Add(payment);
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při vytváření entity platba - " + e.Message);
+                Logger.LogError(e.Message);
             }
             return result;
         }
 
-        public ResultSvc<InstructorRole> ChangeOrder(InstructorRole instructorRole, bool up, string userId)
+        public ResultSvc<InstructorRole> ChangeOrder(InstructorRole instructorRole, bool up)
         {
-            var result = new ResultSvc<InstructorRole>(null, instructorRole);
+            var result = new ResultSvc<InstructorRole>(instructorRole);
             try
             {
                 if((instructorRole.Order == 1 && up) || (instructorRole.Order == InstructorRoles.Items.Select(x => x.Order).DefaultIfEmpty(1).Max() && !up))
@@ -354,23 +339,23 @@ namespace Camp.Data
                 {
                     var iRole = InstructorRoles.Items.FirstOrDefault(x => x.Order == (up ? instructorRole.Order - 1 : instructorRole.Order + 1));
                     iRole.Order = up ? iRole.Order + 1 : iRole.Order - 1;
-                    iRole.UserUpdatedId = userId;
+                    iRole.UserUpdatedId = Context.HttpContext.User.GetUserId();
                     instructorRole.Order = up ? instructorRole.Order - 1 : instructorRole.Order + 1;
-                    instructorRole.UserUpdatedId = userId;
+                    instructorRole.UserUpdatedId = Context.HttpContext.User.GetUserId();
                     InstructorRoles.Update(iRole);
                     InstructorRoles.Update(instructorRole);
                 }
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při změny pořadí entity instruktor role - " + e.Message);
+                Logger.LogError(e.Message);
             }
             return result;
         }
 
-        public ResultSvc<InstructorRole> DeleteInstructorRole(InstructorRole instructorRole, string userId)
+        public ResultSvc<InstructorRole> DeleteInstructorRole(InstructorRole instructorRole)
         {
-            var result = new ResultSvc<InstructorRole>(null, instructorRole);
+            var result = new ResultSvc<InstructorRole>(instructorRole);
             try
             {
                 foreach (var ir in InstructorRoles.Items.Where(x => x.Order > instructorRole.Order))
@@ -378,24 +363,24 @@ namespace Camp.Data
                     ir.Order--;
                     InstructorRoles.Update(ir);
                 }
-                instructorRole.UserDeletedId = userId;
+                instructorRole.UserDeletedId = Context.HttpContext.User.GetUserId();
                 InstructorRoles.Delete(instructorRole);
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při mazání entity InstructorRole - " + e.Message);
+                Logger.LogError(e.Message);
             }
             return result;
         }
 
-        public ResultSvc<CampBatch> CreateCampBatch(CampBatch campBatch, string userId)
+        public ResultSvc<CampBatch> CreateCampBatch(CampBatch campBatch)
         {
-            var result = new ResultSvc<CampBatch>(null, campBatch);
+            var result = new ResultSvc<CampBatch>(campBatch);
             try
             {
                 if (!CampBatches.Items.Any(x => x.Batch == campBatch.Batch && x.CampId == campBatch.CampId && x.From == campBatch.From && x.To == campBatch.To))
                 {
-                    campBatch.UserCreatedId = userId;
+                    campBatch.UserCreatedId = Context.HttpContext.User.GetUserId();
                     CampBatches.Add(campBatch);
                 }
                 else
@@ -405,7 +390,7 @@ namespace Camp.Data
             }
             catch (Exception e)
             {
-                Logger.LogError("Chyba při vytváření entity turnusu - " + e.Message);
+                Logger.LogError(e.Message);
             }
             return result;
         }

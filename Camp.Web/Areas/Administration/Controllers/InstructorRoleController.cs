@@ -41,7 +41,7 @@ namespace Camp.Web.Areas.Administration.Controllers
         {
             if (ModelState.IsValid)
             {
-                Svc.CreateInstructorRole(model, User.GetUserId());
+                Svc.CreateInstructorRole(model);
                 Svc.Commit();
                 return RedirectToAction("Index");
             }
@@ -83,7 +83,7 @@ namespace Camp.Web.Areas.Administration.Controllers
             if (model == null)
                 return NotFound();
 
-            Svc.DeleteInstructorRole(model, User.GetUserId());
+            Svc.DeleteInstructorRole(model);
             Svc.Commit();
 
             return RedirectToAction("Index");
@@ -95,7 +95,7 @@ namespace Camp.Web.Areas.Administration.Controllers
             if (model == null)
                 return Json(false);
 
-            Svc.ChangeOrder(model, up, User.GetUserId());
+            Svc.ChangeOrder(model, up);
             Svc.Commit();
             return Json(true);
         }

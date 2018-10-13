@@ -65,6 +65,7 @@ namespace Camp.Web
                 .AddEntityFrameworkStores<CampDbContext>();
             services.AddScoped<ICampService, CampEFCoreService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<ILoggerFactory, LoggerFactory>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

@@ -3,9 +3,6 @@ using Camp.Data.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Camp.Data
 {
@@ -30,20 +27,20 @@ namespace Camp.Data
         void Commit();
 
         ResultSvc<Diet> CreateDiet(Diet diet);
-        ResultSvc<InstructorRole> CreateInstructorRole(InstructorRole role, string userId);
-        ResultSvc<Photo> CreatePhoto(Photo photo, string userId);
-        ResultSvc<Instructor> CreateInstructor(Instructor instructor, string userId);
-        ResultSvc<CampCategory> CreateCampCategory(CampCategory campCategory, string userId);
-        ResultSvc<Entity.Camp> CreateCamp(Entity.Camp camp, string userId);
-        ResultSvc<CampBatch> CreateCampBatch(CampBatch campBatch, string userId);
-        ResultSvc<ObjectType> CreateObjectType(ObjectType objectType, string userId);
-        ResultSvc<Entity.Object> CreateObject(Entity.Object _object, string userId);
-        ResultSvc<ObjectTypePrice> CreateObjectTypePrice(ObjectTypePrice objectTypePrice, string userId);
-        ResultSvc<InstructorCamp> AddInstructorToCamp(int instructorId, int campBatchId, int instructorRoleId, string userId);
-        ResultSvc<ObjectOrder> CreateObjectOrder(ObjectOrder objectOrder, string userId);
-        ResultSvc<Payment> CreatePayment(Payment payment, string userId);
-        ResultSvc<InstructorRole> ChangeOrder(InstructorRole instructorRole, bool up, string userId);
-        ResultSvc<InstructorRole> DeleteInstructorRole(InstructorRole instructorRole, string userId);
+        ResultSvc<InstructorRole> CreateInstructorRole(InstructorRole role);
+        ResultSvc<Photo> CreatePhoto(Photo photo);
+        ResultSvc<Instructor> CreateInstructor(Instructor instructor);
+        ResultSvc<CampCategory> CreateCampCategory(CampCategory campCategory);
+        ResultSvc<Entity.Camp> CreateCamp(Entity.Camp camp);
+        ResultSvc<CampBatch> CreateCampBatch(CampBatch campBatch);
+        ResultSvc<ObjectType> CreateObjectType(ObjectType objectType);
+        ResultSvc<Entity.Object> CreateObject(Entity.Object _object);
+        ResultSvc<ObjectTypePrice> CreateObjectTypePrice(ObjectTypePrice objectTypePrice);
+        ResultSvc<InstructorCamp> AddInstructorToCamp(int instructorId, int campBatchId, int instructorRoleId);
+        ResultSvc<ObjectOrder> CreateObjectOrder(ObjectOrder objectOrder);
+        ResultSvc<Payment> CreatePayment(Payment payment);
+        ResultSvc<InstructorRole> ChangeOrder(InstructorRole instructorRole, bool up);
+        ResultSvc<InstructorRole> DeleteInstructorRole(InstructorRole instructorRole);
         ResultSvc<InstructorCamp> RemoveInstructorCampBatch(int campBatchId, int instructorId, int instructorRoleId);
     }
 }

@@ -3,9 +3,7 @@ using Camp.Data.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Camp.Data
 {
@@ -29,6 +27,9 @@ namespace Camp.Data
             Payments = new PaymentRepository(db);
             Photos = new PhotoRepository(db);
             Context = new HttpContextAccessor();
+            LoggerFactory = new LoggerFactory();
+            LoggerFactory.AddFile("Logs/{Date}.txt");
+            Logger = LoggerFactory.CreateLogger("Log");
         }
 
         public override void Commit()
@@ -44,7 +45,7 @@ namespace Camp.Data
         public override ResultSvc<InstructorCamp> RemoveInstructorCampBatch(int campBatchId, int instructorId, int instructorRoleId)
         {
             var instructorCamp = DbContext.InstructorCamps.FirstOrDefault(x => x.CampBatchId == campBatchId && x.InstructorId == instructorId && x.InstructorRoleId == instructorRoleId);
-            var result = new ResultSvc<InstructorCamp>(null, instructorCamp);
+            var result = new ResultSvc<InstructorCamp>(instructorCamp);
             try
             {
                 if(instructorCamp == null)
@@ -56,9 +57,9 @@ namespace Camp.Data
                     DbContext.InstructorCamps.Remove(instructorCamp);
                 }
             }
-            catch
+            catch (Exception e)
             {
-
+                Logger.LogError(e.Message);
             }
             return result;
         }

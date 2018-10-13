@@ -22,6 +22,12 @@ namespace Camp.Data
             this.Obj = Obj;
         }
 
+        public ResultSvc(T Obj)
+        {
+            this.Errors = null;
+            this.Obj = Obj;
+        }
+
         public virtual string Message => !IsOK ? Errors.Aggregate((i, j) => i + " " + j) : "";
     }
 }

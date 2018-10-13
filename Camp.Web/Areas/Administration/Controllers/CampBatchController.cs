@@ -43,7 +43,7 @@ namespace Camp.Web.Areas.Administration.Controllers
         {
             if (ModelState.IsValid)
             {
-                Svc.CreateCampBatch(model, User.GetUserId());
+                Svc.CreateCampBatch(model);
                 Svc.Commit();
                 return RedirectToAction("Index");
             }
@@ -123,7 +123,7 @@ namespace Camp.Web.Areas.Administration.Controllers
 
         public JsonResult AddInstructor(int id, int instructorId, int instructorRoleId)
         {
-            var res = Svc.AddInstructorToCamp(instructorId, id, instructorRoleId, User.GetUserId());
+            var res = Svc.AddInstructorToCamp(instructorId, id, instructorRoleId);
             if (res.IsOK)
                 Svc.Commit();
 
