@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UtilityLibrary;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace Camp.Data
 {
@@ -13,7 +14,8 @@ namespace Camp.Data
     {
         public CampDbContext(DbContextOptions<CampDbContext> options)
             : base(options)
-        { }
+        {
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

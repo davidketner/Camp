@@ -1,5 +1,6 @@
 ﻿using Camp.Data.Entity;
 using Camp.Data.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,11 +23,13 @@ namespace Camp.Data
         IObjectTypeRepository ObjectTypes { get; set; }
         IPaymentRepository Payments { get; set; }
         IPhotoRepository Photos { get; set; }
+        IHttpContextAccessor Context { get; set; }
+        ILogger Logger { get; }
         UserManager<User> UserManager { get; set; }
         void Dispose();
         void Commit();
 
-        ResultSvc<Diet> CreateDiet(Diet diet, string userId);
+        ResultSvc<Diet> CreateDiet(Diet diet);
         ResultSvc<InstructorRole> CreateInstructorRole(InstructorRole role, string userId);
         ResultSvc<Photo> CreatePhoto(Photo photo, string userId);
         ResultSvc<Instructor> CreateInstructor(Instructor instructor, string userId);

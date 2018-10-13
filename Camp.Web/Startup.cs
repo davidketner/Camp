@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Camp.Data;
 using Camp.Data.Entity;
+using Microsoft.Extensions.Logging;
 
 namespace Camp.Web
 {
@@ -59,10 +60,11 @@ namespace Camp.Web
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._+";
                 options.User.RequireUniqueEmail = true;
             });
-
+            
             services.AddDefaultIdentity<User>()
                 .AddEntityFrameworkStores<CampDbContext>();
             services.AddScoped<ICampService, CampEFCoreService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

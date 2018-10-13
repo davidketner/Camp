@@ -1,5 +1,6 @@
 ﻿using Camp.Data.Entity;
 using Camp.Data.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,7 @@ namespace Camp.Data
             ObjectTypes = new ObjectTypeRepository(db);
             Payments = new PaymentRepository(db);
             Photos = new PhotoRepository(db);
+            Context = new HttpContextAccessor();
         }
 
         public override void Commit()

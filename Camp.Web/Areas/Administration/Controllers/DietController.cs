@@ -41,7 +41,7 @@ namespace Camp.Web.Areas.Administration.Controllers
         {
             if (ModelState.IsValid)
             {
-                Svc.CreateDiet(model, User.GetUserId());
+                Svc.CreateDiet(model);
                 Svc.Commit();
                 return RedirectToAction("Index");
             }

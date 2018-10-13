@@ -2,6 +2,7 @@
 using System.Linq;
 using Camp.Data.Entity;
 using Camp.Data.Repositories;
+using Camp.Web.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,11 +24,10 @@ namespace Camp.Data
         public IObjectTypeRepository ObjectTypes { get; set; }
         public IPaymentRepository Payments { get; set; }
         public IPhotoRepository Photos { get; set; }
+        public IHttpContextAccessor Context { get; set; }
         public UserManager<User> UserManager { get; set; }
 
-        //Logger
         private static ILoggerFactory _Factory = null;
-
         public static ILoggerFactory LoggerFactory
         {
             get
@@ -41,8 +41,8 @@ namespace Camp.Data
             }
             set { _Factory = value; }
         }
-        public static ILogger Logger => LoggerFactory.CreateLogger("Log");
-        //
+
+        public ILogger Logger => LoggerFactory.CreateLogger("Log");
 
         public virtual void Commit()
         {
@@ -54,7 +54,7 @@ namespace Camp.Data
             throw new NotImplementedException();
         }
 
-        public ResultSvc<Diet> CreateDiet(Diet diet, string userId)
+        public ResultSvc<Diet> CreateDiet(Diet diet)
         {
             var result = new ResultSvc<Diet>(null, diet);
             try
@@ -62,7 +62,7 @@ namespace Camp.Data
                 if (!Diets.Items.Any(x => x.Name == diet.Name.Trim()))
                 {
                     diet.Name = diet.Name?.Trim();
-                    diet.UserCreatedId = userId;
+                    diet.UserCreatedId = Context.HttpContext.User.GetUserId();
                     Diets.Add(diet);
                 }
                 else
